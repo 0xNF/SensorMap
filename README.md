@@ -1,6 +1,6 @@
 # Zodiac Demo
 
-<img src="10thfloor.gif" height=512>
+<img src="floors.gif" height=512>
 
 ## Set Up
 
