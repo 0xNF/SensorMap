@@ -18,7 +18,7 @@ const ROOM_OCCUPIED_EN = "In Use";
 const REQUEST_NORMAL = "呼出中　Calling";
 const REQUEST_URGENT = "緊急 Urgent";
 
-const IS_DEMO = true;
+const IS_DEMO = false;
 
 function DEMO_ENGAGE() {
     console.log("ayy");
