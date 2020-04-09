@@ -3,7 +3,7 @@ let AREAIDX_2_ROOMNAME = {};
 let ROOMNAME_2_AREAIDX = {};
 const AREAS = {}
 const FETCH_LATEST_FROM_SERVER_SECS = 5; /* how often to retrieve non-critical data from the server (temp, humidity) */
-let OCCUPANCY_TIMEOUT_SECS = FETCH_LATEST_FROM_SERVER_SECS * 2000; /* Occupancy does not report "no people", so we set a timeout to say "no people" off after no readings for some amount of seconds*/
+let OCCUPANCY_TIMEOUT_SECS = FETCH_LATEST_FROM_SERVER_SECS * 2; /* Occupancy does not report "no people", so we set a timeout to say "no people" off after no readings for some amount of seconds*/
 
 let LastFetchDate = new Date();
 
