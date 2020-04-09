@@ -1,4 +1,4 @@
-# Zodiac Demo
+# Sensor Map Demo
 
 <img src="floors.gif" height=512>
 
