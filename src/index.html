@@ -1,0 +1,72 @@
+<html>
+<head>
+    <title>会議室のご案内</title>
+    <meta charset="utf-8">
+    <link href="/img/favicon.png" rel="shortcut icon" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+    <header style="overflow: auto; background-color: red; display: grid; margin-bottom: 30px;">
+        <span style="text-align: center; color: white; font-family: Helvetica, sans-serif Verdana, Geneva, Tahoma, sans-serif;">
+            <span style="font-size: 1.5em">
+                会議室のご案内 | Zodiac Conference Room Information
+            </span>
+        </span>
+        <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+            <label class="btn btn-secondary">
+              <input type="radio" name="options" id="option1" onclick="showView('map')" checked> Map View
+            </label>
+            <label class="btn btn-secondary">
+              <input type="radio" name="options" id="option2" onclick="showView('table')"> Table View
+            </label>
+          </div>
+    </header>
+    <div id="root">
+    </div>
+    <div id="viewTable" hidden>
+        <table id="roomTable" class="table table-striped" style="text-align: center; font-size: 20px">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" style="text-align: left">会議室名 Room</th>
+                    <th scope="col">空き状況 Availability</th>
+                    <th scope="col">温度 Temperature</th>
+                    <th scope="col">湿度 Humidity</th>
+                    <th scope="col">呼出 Last Call</th>
+                    <th scope="col">緊急呼出 Last Emergency Call</th>
+                </tr>
+            </thead>
+            <tbody id="roomTableBody">
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <footer>
+        <div style="float: left; font-size: 8px">
+            Last Reqested At: 
+            <span id="lastRequestedDate">
+                
+            </span>
+            <br/>
+            Last New Data At:
+            <span id="lastDataAtDate">
+                
+            </span>
+        </div>
+        <sub style="float: right">
+            <span>
+                &copy
+            </span>
+            2020 Asteria Corporation
+        </sub>
+    </footer>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="d3.min.js"></script>
+<script src="main.js"></script>
+<script src="https://127.0.0.1:29444/gappapi"></script>
+</html>
