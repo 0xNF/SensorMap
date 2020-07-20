@@ -1,8 +1,5 @@
-# SensorMap2
+# golang_server
 
-This branch will be the main Development branch going forward. 
-Until this branch is complete, `master` will remain the old, functional branch.
+This branch is for experimenting with adding a golang server backend.
 
-# Experiments
-
-New experiemnts should branch off of this one. No further additions to `master` or `dev` will be permitted beyond bugfixes
+This experiment is currently focused on using the [gin](https://github.com/gin-gonic/gin) framework.
