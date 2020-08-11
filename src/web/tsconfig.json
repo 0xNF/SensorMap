@@ -4,6 +4,7 @@
   "include": ["src/**/*", "server.ts"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
   "compilerOptions": {
-    "types": ["node", "svelte"]
-  }
+    "types": ["node", "svelte"],
+    "baseUrl": "./src"
+  },
 }

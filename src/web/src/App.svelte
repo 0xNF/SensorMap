@@ -7,6 +7,7 @@
     } from "./context/userContext";
     import About from "./pages/About.svelte";
     import LoginForm from "./pages/LoginForm.svelte";
+    import Map from "./pages/Map.svelte";
 
     export let url = ""; //This property is necessary declare to avoid ignore the Router
 
@@ -28,26 +29,40 @@
 
 <section>
     <Router url="{url}">
-        <nav>
-           <Link to="/">Home</Link>
-           <Link to="about">About</Link>
-         </nav>
-         <div>
+        <div class="content">
             <Route path="about" component="{About}" /> 
             <Route path="/">
                 <LoginForm />
             </Route>
-         </div>
-       </Router>
+            <Route path="/map">
+                <Map />
+            </Route>
+        </div>
+        <footer>
+            (c) 2020 Asteria Corp.
+        </footer>
+    </Router>
 </section>
+
 
 <style>
     section {
-        height: 100vh;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(to right, #cd76e2, #e358ab);	
+        background: linear-gradient(to right, #cd76e2, #e358ab);
+        height: 100%;
       }
+
+      :global(.bg) {
+        background-color: #F2F2F2;
+    }
+
+    .content {
+        height: 100%;
+        padding-bottom: -2.5rem;
+    }
+
+    footer {
+        bottom: 0;
+        height: 2.5rem;
+        position: absolute;
+    }
 </style>

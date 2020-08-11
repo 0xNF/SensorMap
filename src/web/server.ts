@@ -1,3 +1,4 @@
+/* this is required to let us cold navigate to pages that aren't the home page */
 const { createServer } = require("http");
 const app = require("./dist/App.js");
 

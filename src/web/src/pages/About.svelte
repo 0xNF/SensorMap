@@ -1,8 +1,12 @@
-<script>
-    let pageName="Home Page";
+<script lang="ts">
+//   import { getContext } from 'svelte'
+//   const theme = getContext('theme');
+import ""
+
+  const pageName="About Page";
 </script>
 
-<main>
+<main class="bg">
     <h1> {pageName}!</h1>
     <p>Welcome this is my <b>{pageName}</b></p>
 </main>
