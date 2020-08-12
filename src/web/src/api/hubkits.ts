@@ -28,9 +28,21 @@ async function GetSensorMaps(): Promise<Array<Gravio.SensorMap>> {
     )
 }
 
+/** Updates a SensorMap on the server, such as for DisplayName, new Map image, or new device positions
+ * Returns either the servers view of the new SensorMap, or an error
+ */
+async function UpdateSensorMap(sensorMap: Gravio.SensorMap): Promise<Gravio.SensorMap> {
+    try {
+        // NF TODO - here is where we will submit the sensor information for storage on the server
+        return Promise.reject("invalid file type");
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
 
 export {
     GetHubkits,
     RegisterNewHubkit,
     GetSensorMaps,
+    UpdateSensorMap,
 }

@@ -23,6 +23,30 @@
         Name: "",
     };
 
+    /** refreshes hubkit data so that the side menu contains the newest areas, layers, etc */
+    async function RefreshHubkits(): Promise<void> {
+        // NF TODO
+        console.log("refreshing hubkits");
+        try {
+
+        } catch (error) {
+            console.log("encountered an error while refreshing hubkits:");
+            console.log(error);
+        }
+    }
+
+    /** Saves the changes Hubkit data, such as Hubkit or Area DisplayNames, or device positions (position on map can also be saved in the Maps component)*/
+    async function UpdateHubkits(): Promise<void> {
+        try {
+            // NF todo
+            console.log("updating Hubkits");
+            return;
+        } catch (error) {
+            console.log("encountered an error while updating hubkit data:");
+            console.log(error);
+        }
+    }
+
     /** attempts to register a hubkit. */
     async function TryAddHubkit(): Promise<void> {
         errors = writable({}); // reset error object
@@ -64,6 +88,7 @@
         }
     }
 
+    /** controls what sub-section is expanded. If one is expanded, the others are collapsed */
     let expandedArea = writable(-1);
     function toggleArea(which: number) {
         if ($expandedArea === which) {
@@ -133,7 +158,7 @@
                     <div class="CollapsableSectionHeader">
                         <h3>{hk.Hubkit.DisplayName}</h3>
                         <span class="ButtonGroup">
-                            <button title="Refresh"><img src="assets/refresh.svg" height="10" width="10"/></button>
+                            <button title="Refresh" on:click={() => RefreshHubkits()}><img src="assets/refresh.svg" height="10" width="10"/></button>
                             <button  on:click={() => toggleHubkit(`${i}`)} title="Collapse this section">{ 
                                 $expandedHubkit === `${i}` ? "˄" : "˅"
                             }</button>
@@ -163,6 +188,9 @@
                             <label>Map File</label>
                             <input type="file" value={hk.Hubkit.MapUrl ? hk.Hubkit.MapUrl : ""} />
                         </div>
+                        <div class="CenteredItem">
+                            <button title="Save changes to this Hubkit" on:click={() => UpdateHubkits()}>Update</button>
+                        </div>
                         <!-- Area Info -->
                         <div class="HubkitAreas">
                             <h4>Areas</h4>
@@ -184,6 +212,8 @@
                                                 <div class="Metadata">
                                                     <label>Display Name</label>
                                                     <input type="text" value={area.DisplayName} placeholder={area.AreaName}/>
+                                                    <label>Map File</label>
+                                                    <input type="file" value={area.MapUrl ? area.MapUrl : ""} />
                                                 </div>
                                                 <div class="AreaDeviceList">
                                                     <span style="text-decoration: underline">Devices</span>
@@ -262,8 +292,8 @@
         width: 15px;
         text-align: center;
     }
-    .CenteredItem {
-        position: absolute;
+    :global(.CenteredItem) {
+        /* position: fixed; */
         width: 50%;
         margin: 0 auto;
         left: 0;
@@ -332,10 +362,10 @@
         margin-bottom: 1px;
         padding: 5px;
     }
-    .error {
+    :global(.error) {
         color: red;
     }
-    .errorBorder {
+    :global(.errorBorder) {
         border-color: red;
         border-width: 2px;
         border-style: solid;

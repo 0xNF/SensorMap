@@ -5,7 +5,12 @@ import type { Hubkit } from '../models/GravioModels';
 const Smaps: Writable<Array<SensorMap>> = writable([]);
 const Hubkits: Writable<Array<Hubkit>> = writable([]);
 
+const AcceptedMapFiles: ReadonlyArray<string> = [
+    "image/*",
+];
+
 export {
     Smaps,
     Hubkits,
+    AcceptedMapFiles
 };

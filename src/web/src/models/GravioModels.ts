@@ -1,5 +1,6 @@
 /* this file models items that deal directly with Gravio objects */
 
+/** A Gravio Area with some additional SMAP specific stuff like Display Name and Map URL. Areas belong to Hubkits. */
 class Area {
     /** GUID of this Area, as known by Hubkit */
     readonly Id: string;
@@ -11,17 +12,21 @@ class Area {
     readonly Devices: Array<Device>;
     /** User-overridable Display Name for map display purposes. Defaults to this.AreaName if not supplied. */
     DisplayName?: string;
+    /** url pointing to map image for this Area. May be empty. Both Hubkits as a whole, and Areas specifically may have their own unique maps*/
+    MapUrl?: string;
 
 
-    constructor (areaName: string, areaIndex: number, devices: Array<Device>, areaId: string, displayName?: string) {
+    constructor (areaName: string, areaIndex: number, devices: Array<Device>, areaId: string, displayName?: string, mapUrl?: string) {
         this.Id = areaId;
         this.AreaName = areaName;
         this.AreaIndex = areaIndex;
         this.Devices = devices;
         this.DisplayName = displayName ?? areaName;
+        this.MapUrl = mapUrl;
     }
 }
 
+/** A Gravio Device with some additional SMAP specific stuff like Display Name. Devices belong to Areas. */
 class Device {
     /** GUID of this Device, as known by Hubkit */
     readonly Id: string;
@@ -51,6 +56,7 @@ class Device {
     }
 }
 
+/** A Gravio Hubkit with some additional SMAP specific stuff like Display Name and Map URL. */
 class Hubkit {
     /** GUID of this Hubkit, as supplied by the connected Hubkit */
     readonly Id: string;
@@ -65,7 +71,7 @@ class Hubkit {
     /** url pointing to map image for this Hubkit. May be empty. */
     MapUrl?: string;
 
-    constructor(hubkitName: string, areas: Array<Area>, address: string, hubkitId: string, mapUrl?: string, displayName?: string) {
+    constructor(hubkitName: string, areas: Array<Area>, address: string, hubkitId: string, displayName?: string, mapUrl?: string,) {
         this.Id = hubkitId;
         this.HubkitName = hubkitName;
         this.Areas = areas;
@@ -75,6 +81,7 @@ class Hubkit {
     }
 }
 
+/** The top-most element of SMAP, which contains a hubkit (maybe more than one?) */
 class SensorMap {
     /** Id of the SMap from the server */
     readonly Id: string;
@@ -90,6 +97,22 @@ class SensorMap {
         this.Public = pub;
         this.Locked = locked;
         this.Hubkit = item;
+    }
+}
+
+/** Represents a Gravio Device with X and Y offsets to display on a Map image */
+class PositionedDevice {
+    /** Device that this positioned device is representing */
+    readonly Device: Device;
+    /** X position of this element */
+    OffsetX: number;
+    /** Y position of this element */
+    OffsetY: number;
+
+    constructor(device: Device, offX: number, offY: number) {
+        this.Device = device;
+        this.OffsetX = offX;
+        this.OffsetY = offY;
     }
 }
 
@@ -161,6 +184,7 @@ export {
     Area,
     Device,
     SensorMap,
+    PositionedDevice,
     DeviceTypeMap,
     DeviceType2IconMap,
 }
