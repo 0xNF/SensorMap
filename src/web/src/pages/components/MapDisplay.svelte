@@ -28,7 +28,7 @@
 <section>
     <span>
         {#if !SensorMap}
-            nuttin' here
+            No Sensor Map is currently selected. Select one from the menu above, or register a new Hubkit.
         {:else if !SensorMap.Hubkit?.MapUrl}
             No Map Data for this Hubkit.
             <label>Upload Map File</label>
