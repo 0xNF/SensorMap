@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { HubkitSubmission } from "models/SmapModels";
-    import { Hubkits } from "context/mapContext";
+    import { Hubkits, AcceptedMapFiles } from "context/mapContext";
     import type { SensorMap } from "models/GravioModels";
     import { writable } from "svelte/store";
     // import { getContext, setContext } from 'svelte';
@@ -186,7 +186,10 @@
                             <input type="text" required value={hk.Hubkit.Address} placeholder="127.0.0.1"/>
 
                             <label>Map File</label>
-                            <input type="file" value={hk.Hubkit.MapUrl ? hk.Hubkit.MapUrl : ""} />
+                            <span>
+                                {hk.Hubkit.MapUrl ?? "No Map File Uploaded"}
+                                <input type="file" bind:value={hk.Hubkit.MapUrl} accept={AcceptedMapFiles.join(",")}/>
+                            </span>
                         </div>
                         <div class="CenteredItem">
                             <button title="Save changes to this Hubkit" on:click={() => UpdateHubkits()}>Update</button>

@@ -11,16 +11,6 @@
 
     export let url = ""; //This property is necessary declare to avoid ignore the Router
 
-
-    const submit = ({ email, password }) =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const u: User = new User("Test", "Test@Test.invalid");
-            setContext(userContextKey, u);
-            resolve();
-            },
-         1000)
-        });
     /* initial setup */
     onMount(() => {
         setContext(userContextKey, userContextInitialValue);
@@ -29,7 +19,10 @@
 
 <section>
     <Router url="{url}">
-        <div class="content">
+        <header>
+            hi
+        </header>
+        <main class="content">
             <Route path="about" component="{About}" /> 
             <Route path="/">
                 <LoginForm />
@@ -37,9 +30,9 @@
             <Route path="/map">
                 <Map />
             </Route>
-        </div>
+        </main>
         <footer>
-            (c) 2020 Asteria Corp.
+            (c) 2020 ayy lmao, llc.
         </footer>
     </Router>
 </section>
@@ -47,22 +40,29 @@
 
 <style>
     section {
-        background: linear-gradient(to right, #cd76e2, #e358ab);
+        /* background: linear-gradient(to right, #cd76e2, #e358ab); */
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
       }
 
       :global(.bg) {
         background-color: #F2F2F2;
     }
-
-    .content {
+    /* html {
         height: 100%;
-        padding-bottom: -2.5rem;
+    } */
+    header {
+        flex: 0 1 5%;
+        background: red;
     }
-
+    main {
+        flex: 0 1 90%;
+        background: yellow;
+    }
     footer {
-        bottom: 0;
-        height: 2.5rem;
-        position: absolute;
+        flex: 0 1 5%;
+        background: blue;
     }
 </style>

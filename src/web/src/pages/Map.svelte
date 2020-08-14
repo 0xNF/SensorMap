@@ -124,8 +124,9 @@
     }
 
     #central_panel {
-        display: grid;
-        height: 50%;
+        /* display: grid;
+        height: 50%; */
+        height:100%;
     }
     #no_maps {
         display: grid;

@@ -38,6 +38,8 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@svgdotjs/svg.draggable.js": "^3.0.2",
+    "@svgdotjs/svg.js": "^3.0.16",
     "sirv-cli": "^1.0.0",
     "svelte-routing": "^1.4.2",
     "svelte-select": "^3.11.0"

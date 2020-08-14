@@ -16,7 +16,7 @@ export const Areas: { [key: string]: Gravio.Area } = {
 };
 
 export const Hubkits: { [key: string]: Gravio.Hubkit } = {
-    Hubkit0: new Gravio.Hubkit("Test GHub 0", [Areas.Area0], "127.0.0.1", "0xdeadbeef"),
+    Hubkit0: new Gravio.Hubkit("Test GHub 0", [Areas.Area0], "127.0.0.1", "0xdeadbeef", null, "assets/TestAssets/FloorBlank2.png"),
     Hubkit_NoAreas: new Gravio.Hubkit("No Areas Hubkit", [], "127.0.0.2", "0xfeedabba"),
     Hubkit_AreasButEmpty: new Gravio.Hubkit("Areas are Empty", [Areas.Empty0, Areas.Empty1, Areas.Empty2,], "127.0.0.3", "0xEmpty"),
 };
