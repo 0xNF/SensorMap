@@ -101,11 +101,158 @@
 </script>
 
 <section id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" on:click={() => CloseFunction()}>&times;</a>
-    <a href="#">About</a>
-    <a href="#">Services</a>
-    <a href="#">Clients</a>
-    <a href="#">Contact</a>
+        <button class="closebtn" on:click={() => CloseFunction()}>X</button>
+        <!-- Register Hubkit Section -->
+        <div class="CollapsableSection">
+            <div class="CollapsableSectionHeader">
+                <h3>Register Hubkit</h3>
+                <span class="ButtonGroup">
+                    <button  on:click={() => toggleHubkit("Register Hubkit")} title="Collapse this section">{ 
+                        $expandedHubkit === "Register Hubkit" ? "˄" : "˅"
+                    }</button>
+                </span>
+            </div>
+            <div class="CollapsableSectionContent {$expandedHubkit !== "Register Hubkit" ? "Collapsed" : ""}">
+                <form on:submit|preventDefault={TryAddHubkit}>
+                    <div title="Name of the hubkit to connect to. Optional.">
+                        <label>Name:</label>
+                        <input required class="{errors["Name"] ? "errorBorder": ""}" type="text" placeholder="Hubkit name" bind:value={NewHubkitForm.Name}/>
+                        {#if errors["Name"]} 
+                            <div class="error">{errors["Name"]}</div>
+                        {/if}
+                    </div>
+                    
+                    <div title="IP address or DNS name of the hubkit to connect to. Required.">
+                        <label>Address:</label>
+                        <input required class="{errors["Address"] ? "errorBorder": ""}" type="text" placeholder="127.0.0.1" bind:value={NewHubkitForm.Address}/>
+                        {#if errors["Address"]} 
+                            <div class="error">{errors["Address"]}</div>
+                        {/if}
+                    </div>
+
+                    <div title="Image file to use for the map display. Optional.">
+                        <label>Map Image:</label>
+                        <input class="{errors["Map"] ? "errorBorder": ""}" type="file" bind:value={NewHubkitForm.MapImage}/>
+                        {#if errors["Map"]} 
+                            <div class="error">{errors["Map"]}</div>
+                        {/if}
+                    </div>
+                    <br/>
+                    <button title="Register this Hubkit.">+ Add Hubkit</button>
+                    {#if errors["General"]} 
+                        <div class="error" id="ErrorGeneral">{errors["General"]}</div>
+                    {/if}
+                </form>
+            </div>
+        </div>
+
+        <h2 style="text-decoration: underline;">Hubkits</h2>
+        <!-- Modify Hubkit Section(s) -->
+        {#if SavedHubkits.length === 0}
+            <span class="CenteredItem">You haven't registered any Hubkits</span>
+        {:else}
+            {#each SavedHubkits as hk, i}
+                <div class="CollapsableSection">
+                    <div class="CollapsableSectionHeader">
+                        <h3>{hk.Hubkit.DisplayName}</h3>
+                        <span class="ButtonGroup">
+                            <button title="Refresh" on:click={() => RefreshHubkits()}><img src="assets/refresh.svg" height="10" width="10"/></button>
+                            <button  on:click={() => toggleHubkit(`${i}`)} title="Collapse this section">{ 
+                                $expandedHubkit === `${i}` ? "˄" : "˅"
+                            }</button>
+                        </span>
+                    </div>
+                    <div class="CollapsableSectionContent {$expandedHubkit !== `${i}` ? "Collapsed" : ""}">
+                        <!-- Metadata like Id, Name, public, etc -->
+                        <div class="Metadata">
+                            <label>Id</label>
+                            <span>{hk.Hubkit.Id}</span>
+                        
+                            <label>Name</label>
+                            <span>{hk.Hubkit.HubkitName}</span>
+
+                            <label>Public</label>
+                            <input type="checkbox" bind:checked={hk.Public}/>
+
+                            <label>Locked</label>
+                            <input type="checkbox" bind:checked={hk.Locked}/>
+                        
+                            <label>Display Name</label>
+                            <input type="text" value={hk.Hubkit.DisplayName} placeholder={hk.Hubkit.HubkitName}/>
+
+                            <label>Address</label>
+                            <input type="text" required value={hk.Hubkit.Address} placeholder="127.0.0.1"/>
+
+                            <label>Map File</label>
+                            <span>
+                                {hk.Hubkit.MapUrl ?? "No Map File Uploaded"}
+                                <input type="file" bind:value={hk.Hubkit.MapUrl} accept={AcceptedMapFiles.join(",")}/>
+                            </span>
+                        </div>
+                        <div class="CenteredItem">
+                            <button title="Save changes to this Hubkit" on:click={() => UpdateHubkits()}>Update</button>
+                        </div>
+                        <!-- Area Info -->
+                        <div class="HubkitAreas">
+                            <h4>Areas</h4>
+                            {#if hk.Hubkit.Areas.length === 0}
+                                <span>No Areas in this Hubkit</span>
+                            {:else}
+                                {#each hk.Hubkit.Areas as area, k}
+                                    <div class="CollapsableSection">
+                                        <div class="CollapsableSectionHeader">
+                                            <h5>{area.AreaName}</h5>
+                                            <span class="ButtonGroup">
+                                                <button  on:click={() => toggleArea(k)} title="Collapse this section">{ 
+                                                    $expandedArea === k ? "˄" : "˅"
+                                                }</button>
+                                            </span>
+                                        </div>
+                                        {#if $expandedArea === k}
+                                            <div class="AreaExpansion">
+                                                <div class="Metadata">
+                                                    <label>Display Name</label>
+                                                    <input type="text" value={area.DisplayName} placeholder={area.AreaName}/>
+                                                    <label>Map File</label>
+                                                    <input type="file" value={area.MapUrl ? area.MapUrl : ""} />
+                                                </div>
+                                                <div class="AreaDeviceList">
+                                                    <span style="text-decoration: underline">Devices</span>
+                                                    {#if area.Devices.length === 0}
+                                                        <span class="CenteredItem">No Devices in this Area</span>
+                                                    {:else}
+                                                        <ul class="DeviceList">
+                                                            {#each area.Devices as device, j}
+                                                                <li class="DeviceListItem">
+                                                                    {device.DeviceName}
+                                                                    <span class="ButtonGroup">
+                                                                        <!-- Add is enabled only if device isnt on the map already -->
+                                                                        <button title="add {device.DeviceName} to the map">+</button>
+                                                                        <!-- Remove is disabled only if device is already on the map -->
+                                                                        <button title="remove {device.DeviceName} from the map">-</button>
+                                                                    </span>
+                                                                    <div class="DeviceType">
+                                                                        <img
+                                                                        alt="icon for device type {device.DeviceType}"
+                                                                        height="25" width="25" 
+                                                                        src="assets/Devices/{device.getIconImage()}.png">
+                                                                        {device.DeviceType}
+                                                                    </div>
+                                                                </li>
+                                                            {/each}
+                                                        </ul>
+                                                    {/if}
+                                                </div>
+                                            </div>
+                                        {/if}
+                                    </div>
+                                {/each}
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            {/each}
+        {/if}
 </section>
 
 <style>
@@ -222,16 +369,16 @@ div.Metadata input[type="checkbox"] {
 /* The side navigation menu */
 .sidenav {
   height: 100%; /* 100% Full-height */
-  width: 250px; /* 0 width - change this with JavaScript */
+  width: 350px; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
   z-index: 1; /* Stay on top */
-  top: 0; /* Stay at the top */
+  top: 0; /* Stay at theop */
   left: 0;
-  background-color: #111; /* Black*/
+  background-color: white; /* Black*/
   overflow-x: hidden; /* Disable horizontal scroll */
-  overflow-y: scroll; /* Enable vertical scroll */
-  padding-top: 60px; /* Place content 60px from the top */
+  overflow-y: auto; /* Enable vertical scroll */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  padding-top: 50px; /* NF TODO - ask nas. this causes issue with with y-overflow */
 }
 
 /* The navigation menu links */
@@ -252,9 +399,9 @@ div.Metadata input[type="checkbox"] {
 /* Position and style the close button (top right corner) */
 .sidenav .closebtn {
   position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
+  top: 5px;
+  right: 5px;
+  /* font-size: 36px; */
   margin-left: 50px;
 }
 </style>
