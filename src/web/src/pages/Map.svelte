@@ -4,7 +4,7 @@
     import { Smaps } from "context/mapContext";
     import type { SensorMap } from "models/State";
     import SideMenu from "./components/SideMenu.svelte";
-    import MapDisplay from './components/MapDisplay.svelte';
+    import MainDisplay from './components/MainDisplay.svelte';
     import *  as api from 'api/hubkits';
     import type { Hubkit } from 'models/GravioModels';
 
@@ -96,7 +96,7 @@
                     <button on:click={OpenSmapMenu}>+ Add Some</button>
                 </div>
             {:else}
-                <MapDisplay SensorMap={$SelectedSensorMap}/>
+                <MainDisplay SensorMap={$SelectedSensorMap}/>
             {/if}
         </div>
 </section>
