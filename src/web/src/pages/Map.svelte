@@ -8,6 +8,7 @@
     import *  as api from 'api/hubkits';
     import type { Hubkit } from 'models/GravioModels';
 
+
     // todo get Hubkits and get previously selected map
     /** The map that is represented on the screen, selected by the user */
     let SelectedSensorMap: any = writable(null);
@@ -23,10 +24,6 @@
     function CloseSmapMenu(): void {
         $IsMenuOpen = false;
         console.log("Closing side menu");
-    }
-
-    function ExpandDropdown(which: string) {
-        document.getElementById(which).classList.toggle("collapsed");
     }
 
     function SelectSensorMap(id: string) {
@@ -54,6 +51,10 @@
         }
     });
 
+    function expandDropdown() {
+        document.getElementById("hubkitSelectMenu").classList.toggle("show");
+    }
+
 
 </script>
 
@@ -67,19 +68,20 @@
                     {:else}
                         {$SelectedSensorMap.Hubkit.DisplayName}
                     {/if}
-                </span>   
-                <div class="dropdown" style="margin: auto 0; margin-left: 15px;">
-                    <button class="dropbtn">
-                        <span>v</span>
+                </span>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle"
+                    on:click={() => expandDropdown()}
+                    type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     </button>
-                    <div class="dropdown-content">
+                    <div id="hubkitSelectMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         {#each $Smaps as sm}
-                            <div on:click={() => {SelectSensorMap(sm.Hubkit.Id)}}>
+                            <div class="dropdown-item" on:click={() => {SelectSensorMap(sm.Hubkit.Id)}}>
                                 {sm.Hubkit.DisplayName}
                             </div>
                         {/each}
                     </div>
-                </div>
+                  </div>
             </span>
             <span id="user_name_block">
                 User Name
@@ -130,8 +132,6 @@
     }
 
     #central_panel {
-        /* display: grid;
-        height: 50%; */
         height:100%;
     }
     #no_maps {
@@ -146,53 +146,13 @@
     }
 
 
-    /* The dropdown container */
-.dropdown {
-  float: right;
-  overflow: hidden;
-}
-
-/* Dropdown button */
-.dropdown .dropbtn {
-  border: none;
-  outline: none;
-  background-color: inherit;
-  font-family: inherit; /* Important for vertical align on mobile phones */
-  margin: 0; /* Important for vertical align on mobile phones */
-}
-
 /* Add a red background color to navbar links on hover */
 .navbar a:hover, .dropdown:hover .dropbtn {
   background-color: red;
 }
 
-/* Dropdown content (hidden by default) */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-/* Links inside the dropdown */
-.dropdown-content button {
-  float: none;
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-/* Add a grey background color to dropdown links on hover */
-.dropdown-content div:hover {
-  background-color: #ddd;
-}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-  display: block;
+.dropdown-menu > div:hover {
+    background-image: none;
+    background-color: red;
 }
 </style>

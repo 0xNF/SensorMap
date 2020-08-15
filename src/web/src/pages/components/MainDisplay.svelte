@@ -12,6 +12,12 @@
     let newMapUrl: string = "";
     let ErrorText = writable("");
 
+    const views = {
+        MapView: "MapView",
+        TableView: "TableView",
+    }
+    let view = views.MapView;
+
     async function UpdateHubkit() {
         console.log("updating current SensorMap");
         document.getElementById("uploadMapDataError").classList.add("collapsed");
@@ -57,22 +63,23 @@
     }
 
     function showView(which: string) {
-
+        console.log("setting view to: " + which );
     }
     
 </script>
 
 <section>
     <header style="display: flex;">
-        <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-            <label class="btn btn-secondary">
-              <input type="radio" name="options" id="option1" on:click={() => showView('map')} checked> Map View
+        <div style="width: 100%" class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+            <label class="btn btn-secondary {view === views.MapView ? "active" : ""}">
+              <input type="radio" bind:group={view} value={views.MapView} checked={view === views.MapView}> Map View
             </label>
-            <label class="btn btn-secondary">
-              <input type="radio" name="options" id="option2" on:click={() => showView('table')}> Table View
+            <label class="btn btn-secondary {view === views.TableView ? "active" : ""}">
+              <input type="radio" bind:group={view} value={views.TableView} checked={view === views.TableView}> Table View
             </label>
           </div>
     </header>
+    {view}
     <span>
         {#if !SensorMap}
             No Sensor Map is currently selected. Select one from the menu above, or register a new Hubkit.
@@ -95,8 +102,6 @@
 </section>
 
 <style>
-
-
     section {
         height: 100%;
         display: flex;
@@ -108,7 +113,9 @@
         flex: 0 1 5%;
         background: #82868C;
         display: block;
-        padding: 5px 5px 0 5px;
+        /* padding: 5px 5px 0 5px; */
+        margin: 0;
+        padding: 0;
     }
     header button {
 
