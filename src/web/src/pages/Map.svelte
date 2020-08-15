@@ -3,7 +3,7 @@
     import { onMount } from 'svelte';
     import { Smaps } from "context/mapContext";
     import type { SensorMap } from "models/State";
-    import SideMenu from "./components/SideMenu.svelte";
+    import SideMenu from "./components/SideMenu2.svelte";
     import MapDisplay from './components/MapDisplay.svelte';
     import *  as api from 'api/hubkits';
     import type { Hubkit } from 'models/GravioModels';
@@ -58,8 +58,7 @@
 </script>
 
 <section>
-    <div class="bg full">
-        <nav style="display: flex;">
+        <header style="display: flex;">
             <button on:click={OpenSmapMenu}>⚙</button>
             <span style="margin: 0 auto; text-align: center; display: flex;">
                 <span style="display: flex; flex-direction: column; justify-content: center; width: 200px;">
@@ -86,7 +85,7 @@
                 User Name
                 <button>👤</button>
             </span>
-        </nav>
+        </header>
         <span class="side_display" style={$IsMenuOpen ? "display: inline" : "display: none"}>
             <SideMenu CloseFunction={CloseSmapMenu} SavedHubkits={$Smaps}/>
         </span>
@@ -97,28 +96,35 @@
                     <button on:click={OpenSmapMenu}>+ Add Some</button>
                 </div>
             {:else}
-                <MapDisplay SensorMap={$SelectedSensorMap}/>
+                <!-- <MapDisplay SensorMap={$SelectedSensorMap}/> -->
             {/if}
         </div>
-    </div>
 </section>
 
 
 <style>
     section {
         height: 100%;
-    }
-    .full {
-        height: 100%;
-    }
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+      }
 
-    nav {
-        background-color: white;
+    header {
+        flex: 0 1 5%;
+        background: red;
         border: black;
         border-style: solid;
         border-width: 0 0 2px 0;
         display: block;
+        padding: 5px 5px 0 5px;
     }
+
+    .full {
+        height: 100%;
+    }
+
+
     #user_name_block {
         float: right;
     }

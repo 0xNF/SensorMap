@@ -3,8 +3,6 @@
     import { Hubkits, AcceptedMapFiles } from "context/mapContext";
     import type { SensorMap } from "models/GravioModels";
     import { writable } from "svelte/store";
-    // import { getContext, setContext } from 'svelte';
-
     import * as api from "api/hubkits";
 
     /** Hubkits given to the side menu by the containing element. Shows saved registered hubkits */
@@ -346,8 +344,7 @@
         float: right;
     }
     .CollapsableSectionHeader button {
-        /* margin-left: auto; */
-        /* float: right; */
+
     }
     .CollapsableSectionHeader h3 {
         float: left;
@@ -375,22 +372,23 @@
     }
     .container {
         height: 100%;
-        overflow-y: auto;
+        /* overflow-y: auto;
+        max-height: 100%; */
     }
     #closeMenu {
         vertical-align: bottom;
     }
     section {
-        position: absolute;
-        border: black;
+        position: fixed;
+        border-color: black;
         border-style: solid;
-        border-width: 0 2px 0 0;
+        border-width: 0 2px 2px 0;
         background-color: gray;
-        height: 100%;
+        /* height: 100%; */
         width: 25%;
         padding-top: 10px;
         padding-left: 10px;
         padding-right: 10px;
-        padding-bottom: 2.5rem;
+        /* padding-bottom: 2.5rem; */
     }
 </style>

@@ -19,9 +19,6 @@
 
 <section>
     <Router url="{url}">
-        <header>
-            hi
-        </header>
         <main class="content">
             <Route path="about" component="{About}" /> 
             <Route path="/">
@@ -53,12 +50,8 @@
     /* html {
         height: 100%;
     } */
-    header {
-        flex: 0 1 5%;
-        background: red;
-    }
     main {
-        flex: 0 1 90%;
+        flex: 0 1 95%;
         background: yellow;
     }
     footer {
