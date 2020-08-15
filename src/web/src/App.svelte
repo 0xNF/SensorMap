@@ -52,7 +52,7 @@
     } */
     main {
         flex: 0 1 95%;
-        background: yellow;
+        background: lightblue;
     }
     footer {
         flex: 0 1 5%;

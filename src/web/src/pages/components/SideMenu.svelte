@@ -100,8 +100,8 @@
 
 </script>
 
-<section>
-    <div class="container">
+<section id="mySidenav" class="sidenav">
+        <button class="closebtn" on:click={() => CloseFunction()}>X</button>
         <!-- Register Hubkit Section -->
         <div class="CollapsableSection">
             <div class="CollapsableSectionHeader">
@@ -253,13 +253,6 @@
                 </div>
             {/each}
         {/if}
-    </div>
-
-
-    <button id="closeMenu" on:click={CloseFunction}>
-        Close
-    </button>
-
 </section>
 
 <style>
@@ -267,128 +260,148 @@
     /* Device Styles */
     .DeviceType {
 
-    }
-    .DeviceType img {
-        vertical-align: middle;
-    }
-    .DeviceType:before {
-        content: '├'
-    }
-    .DeviceList {
-        margin-top: 0px;
-    }
-    .DeviceListItem {
-        list-style-type: none;
-    }
-    .DeviceListItem:before {
-        content: '├';
-        margin-left: -20px;
-        margin-right: 5px; 
-    }
-    .DeviceListItem span {
-        float: right;
-    }
-    .DeviceListItem span button {
-        padding: 0px;
-        width: 15px;
-        text-align: center;
-    }
-    :global(.CenteredItem) {
-        /* position: fixed; */
-        width: 50%;
-        margin: 0 auto;
-        left: 0;
-        right: 0;
-        text-align: center;
-    }
+}
+.DeviceType img {
+    vertical-align: middle;
+}
+.DeviceType:before {
+    content: '├'
+}
+.DeviceList {
+    margin-top: 0px;
+}
+.DeviceListItem {
+    list-style-type: none;
+}
+.DeviceListItem:before {
+    content: '├';
+    margin-left: -20px;
+    margin-right: 5px; 
+}
+.DeviceListItem span {
+    float: right;
+}
+.DeviceListItem span button {
+    padding: 0px;
+    width: 15px;
+    text-align: center;
+}
+:global(.CenteredItem) {
+    /* position: fixed; */
+    width: 50%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
 
-    /* Metadata Styles */
-    div.Metadata {
-        display:grid;
-        /* grid-template-columns: max-content max-content; */
-        grid-template-columns: max-content 1fr;
-        grid-column-gap: 25px;
-    }
-    div.Metadata label {
-         text-align: left;
-    }
-    div.Metadata label:after {
-        content: ":";
-    }
-    div.Metadata input[type="checkbox"] {
-        width: 0px;
-    }
+/* Metadata Styles */
+div.Metadata {
+    display:grid;
+    /* grid-template-columns: max-content max-content; */
+    grid-template-columns: max-content 1fr;
+    grid-column-gap: 25px;
+}
+div.Metadata label {
+     text-align: left;
+}
+div.Metadata label:after {
+    content: ":";
+}
+div.Metadata input[type="checkbox"] {
+    width: 0px;
+}
 
-    /* Card Styles */
-    .Collapsed {
-        display: none;
-    }
-    .CollapsableSection {
-        border-style: solid;
-        border-color: black;
-        border-width: 1px;
-        padding: 5px;
-        margin-bottom: 1px;
-        background-color: beige;
-    }
-    .CollapsableSectionContent {
+/* Card Styles */
+.Collapsed {
+    display: none;
+}
+.CollapsableSection {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    padding: 5px;
+    margin-bottom: 1px;
+    background-color: beige;
+}
+.CollapsableSectionContent {
 
-    }
-    .CollapsableSectionHeader {
-        text-decoration: underline;
-        width: 100%;
-        display: inline-flex;
-    }
-    .CollapsableSectionHeader .ButtonGroup {
-        margin-left: auto;
-        float: right;
-    }
-    .CollapsableSectionHeader button {
+}
+.CollapsableSectionHeader {
+    text-decoration: underline;
+    width: 100%;
+    display: inline-flex;
+}
+.CollapsableSectionHeader .ButtonGroup {
+    margin-left: auto;
+    float: right;
+}
+.CollapsableSectionHeader button {
 
-    }
-    .CollapsableSectionHeader h3 {
-        float: left;
-    }
-    .CollapsableSectionHeader h3:hover {
-        text-decoration: underline;
-    }
+}
+.CollapsableSectionHeader h3 {
+    float: left;
+}
+.CollapsableSectionHeader h3:hover {
+    text-decoration: underline;
+}
 
-    /* Area styles */
-    .HubkitAreas .CollapsableSection {
-        border-color: black;
-        border-width: 2px;
-        border-style: solid;
-        background-color: white;
-        margin-bottom: 1px;
-        padding: 5px;
-    }
-    :global(.error) {
-        color: red;
-    }
-    :global(.errorBorder) {
-        border-color: red;
-        border-width: 2px;
-        border-style: solid;
-    }
-    .container {
-        height: 100%;
-        /* overflow-y: auto;
-        max-height: 100%; */
-    }
-    #closeMenu {
-        vertical-align: bottom;
-    }
-    section {
-        position: fixed;
-        border-color: black;
-        border-style: solid;
-        border-width: 0 2px 2px 0;
-        background-color: gray;
-        /* height: 100%; */
-        width: 25%;
-        padding-top: 10px;
-        padding-left: 10px;
-        padding-right: 10px;
-        /* padding-bottom: 2.5rem; */
-    }
+/* Area styles */
+.HubkitAreas .CollapsableSection {
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    background-color: white;
+    margin-bottom: 1px;
+    padding: 5px;
+}
+:global(.error) {
+    color: red;
+}
+:global(.errorBorder) {
+    border-color: red;
+    border-width: 2px;
+    border-style: solid;
+}
+
+
+
+/* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 350px; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at theop */
+  left: 0;
+  background-color: white; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  overflow-y: auto; /* Enable vertical scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  padding-top: 50px; /* NF TODO - ask nas. this causes issue with with y-overflow */
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  /* font-size: 36px; */
+  margin-left: 50px;
+}
 </style>

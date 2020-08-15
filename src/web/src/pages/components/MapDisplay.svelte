@@ -62,16 +62,18 @@
     <span style="height: 100%; width: 100%; display: inline-block;">
         {#if !SensorMap}
             No Sensor Map is currently selected. Select one from the menu above, or register a new Hubkit.
-        {:else if !SensorMap.Hubkit?.MapUrl}
-            No Map Data for this Hubkit.
-            <label>Upload Map File</label>
-            <input type="file" bind:value={newMapUrl} accept={AcceptedMapFiles.join(",")}/>
-            <button on:click={() => UpdateHubkit()}>Upload</button>
-            <div id="uploadMapDataError" class="error collapsed">{$ErrorText}</div>
         {:else}
-            <!-- <svg viewBox="0 0 1920 1080" height="90%" width="100%">
-                <image xlink:href="{SensorMap.Hubkit.MapUrl}"/>
-            </svg> -->
+            {#if !SensorMap.Hubkit?.MapUrl}
+                No Map Data for this Hubkit.
+                <label>Upload Map File</label>
+                <input type="file" bind:value={newMapUrl} accept={AcceptedMapFiles.join(",")}/>
+                <button on:click={() => UpdateHubkit()}>Upload</button>
+                <div id="uploadMapDataError" class="error collapsed">{$ErrorText}</div>
+            {:else}
+                <!-- <svg viewBox="0 0 1920 1080" height="90%" width="100%">
+                    <image xlink:href="{SensorMap.Hubkit.MapUrl}"/>
+                </svg> -->
+            {/if}
         {/if}
         <div id="canvas" style="background-color: lightblue; height: 100%; width: 100%;">
         </div>
