@@ -7,7 +7,7 @@
     } from "./context/userContext";
     import About from "./pages/About.svelte";
     import LoginForm from "./pages/LoginForm.svelte";
-    import Map from "./pages/Map.svelte";
+    import MainFrame from "./pages/MainFrame.svelte";
 
     export let url = ""; //This property is necessary declare to avoid ignore the Router
 
@@ -25,7 +25,7 @@
                 <LoginForm />
             </Route>
             <Route path="/map">
-                <Map />
+                <MainFrame />
             </Route>
         </main>
         <footer>

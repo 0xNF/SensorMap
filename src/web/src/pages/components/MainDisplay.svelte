@@ -5,6 +5,8 @@
     import * as api from 'api/hubkits';
     import { onMount } from "svelte";
     import type { Device } from "models/GravioModels";
+    import MapDisplay from "./MapDisplay.svelte";
+    import TableDisplay from "./TableDisplay.svelte";
     import { SVG } from '@svgdotjs/svg.js'
     import '@svgdotjs/svg.draggable.js'
 
@@ -79,7 +81,6 @@
             </label>
           </div>
     </header>
-    {view}
     <span>
         {#if !SensorMap}
             No Sensor Map is currently selected. Select one from the menu above, or register a new Hubkit.
@@ -91,6 +92,11 @@
                 <button on:click={() => UpdateHubkit()}>Upload</button>
                 <div id="uploadMapDataError" class="error collapsed">{$ErrorText}</div>
             {:else}
+                {#if view === views.MapView}
+                    <MapDisplay />
+                {:else}
+                    <TableDisplay />
+                {/if}
                 <!-- <svg viewBox="0 0 1920 1080" height="90%" width="100%">
                     <image xlink:href="{SensorMap.Hubkit.MapUrl}"/>
                 </svg> -->
@@ -119,6 +125,18 @@
     }
     header button {
 
+    }
+    .btn.active {
+        z-index: 0;
+    }
+    .btn-group > .btn.active {
+        z-index: 0;
+    }
+    .btn-group-vertical > .btn.active, .btn-group-vertical > .btn:active, .btn-group-vertical > .btn:focus, .btn-group > .btn.active, .btn-group > .btn:active, .btn-group > .btn:focus  {
+        z-index: 0;
+    }
+    .btn-group-vertical > .btn.active, .btn-group-vertical > .btn:active, .btn-group-vertical > .btn:focus, .btn-group > .btn.active, .btn-group > .btn:active, .btn-group > .btn:focus :hover {
+        z-index: 0;
     }
 
     .collapsed {
