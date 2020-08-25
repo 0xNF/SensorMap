@@ -7,8 +7,6 @@
     import type { Device } from "models/GravioModels";
     import MapDisplay from "./MapDisplay.svelte";
     import TableDisplay from "./TableDisplay.svelte";
-    import { SVG } from '@svgdotjs/svg.js'
-    import '@svgdotjs/svg.draggable.js'
 
     export let SensorMap: SensorMap = null;
     let newMapUrl: string = "";
@@ -93,17 +91,12 @@
                 <div id="uploadMapDataError" class="error collapsed">{$ErrorText}</div>
             {:else}
                 {#if view === views.MapView}
-                    <MapDisplay />
+                    <MapDisplay SensorMap={SensorMap}/>
                 {:else}
-                    <TableDisplay />
+                    <TableDisplay SensorMap={SensorMap}/>
                 {/if}
-                <!-- <svg viewBox="0 0 1920 1080" height="90%" width="100%">
-                    <image xlink:href="{SensorMap.Hubkit.MapUrl}"/>
-                </svg> -->
             {/if}
         {/if}
-        <div id="canvas" style="background-color: lightblue; height: 100%; width: 100%;">
-        </div>
     </span>
 </section>
 
