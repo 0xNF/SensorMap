@@ -3,9 +3,9 @@ import { DeviceTypeMap } from "./GravioModels";
 import type { MapImage } from "./SmapModels";
 
 export const MapImages: { [key: string]: MapImage } = {
-    FloorReferenceFull: { Url:"assets/TestAssets/FloorReference.png", Height: 1536, Width: 2750 },
-    FloorReferenceWrong: { Url:"assets/TestAssets/FloorReference.png", Height: 1080, Width: 1920 },
-    FloorBlank2: { Url:"assets/TestAssets/FloorBlank2.png", Height: 1080, Width: 1920 }
+    FloorReferenceFull: { Url:"assets/TestAssets/FloorReference.png", Height: 1536, Width: 2750 }, /* has the correct image dimensions. */
+    FloorReferenceWrong: { Url:"assets/TestAssets/FloorReference.png", Height: 1080, Width: 1920 }, /* same image, but with incorrectly specified dimensions */
+    FloorBlank2: { Url:"assets/TestAssets/FloorBlank2.png", Height: 1080, Width: 1920 } /* basic image, correct dimensions */
 }
 
 export const Devices:{ [key: string]: Gravio.Device} = {
@@ -14,6 +14,13 @@ export const Devices:{ [key: string]: Gravio.Device} = {
     SingleButton0: new Gravio.Device("SingleButton 0", 2, DeviceTypeMap.Aqara_SingleButton, "2"),
     Motion0: new Gravio.Device("Motion 0", 3, DeviceTypeMap.Aqara_Occupancy, "3"),
 };
+
+export const PositionedDevices: { [key: string]: Gravio.PositionedDevice } = {
+    Temperature0: new Gravio.PositionedDevice(Devices.Temperature0, 0, 0),
+    Humidity0: new Gravio.PositionedDevice(Devices.Humidity0, 0, 0),
+    SingleButton0: new Gravio.PositionedDevice(Devices.SingleButton0, 0, 0),
+    Motion0: new Gravio.PositionedDevice(Devices.Motion0, 0, 0),
+}
 
 export const Areas: { [key: string]: Gravio.Area } = {
     Area0: new Gravio.Area("Test Area 0", 0, [Devices.Temperature0, Devices.Humidity0, Devices.SingleButton0, Devices.Motion0,], "0"),
@@ -27,7 +34,7 @@ export const Hubkits: { [key: string]: Gravio.Hubkit } = {
     Hubkit_NoAreas: new Gravio.Hubkit("No Areas Hubkit", [], "127.0.0.2", "0xfeedabba"),
     Hubkit_AreasButEmpty: new Gravio.Hubkit("Areas are Empty", [Areas.Empty0, Areas.Empty1, Areas.Empty2,], "127.0.0.3", "0xEmpty"),
     Hubkit_ReferenceMap: new Gravio.Hubkit("Reference Map", [], "127.0.0.4", "reference_map_good", null, MapImages.FloorReferenceFull),
-    Hubkit_ReferenceMapBadDims: new Gravio.Hubkit("Bad Dimensions Map", [], "127.0.0.5", "reference_map_good", null, MapImages.FloorReferenceWrong),
+    Hubkit_ReferenceMapBadDims: new Gravio.Hubkit("Bad Dimensions Map", [], "127.0.0.5", "reference_map_bad", null, MapImages.FloorReferenceWrong),
 
 
 };
