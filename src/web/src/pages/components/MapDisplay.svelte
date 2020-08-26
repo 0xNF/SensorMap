@@ -19,7 +19,8 @@
 
 </section>
 
-<style>
+<style type="scss">
+    @import 'style/main.scss';
     section {
         height: 100%;
         width: 100%;

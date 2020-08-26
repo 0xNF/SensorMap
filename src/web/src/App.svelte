@@ -35,7 +35,8 @@
 </section>
 
 
-<style>
+<style type="scss">
+    @import 'style/main.scss';
     section {
         /* background: linear-gradient(to right, #cd76e2, #e358ab); */
         height: 100%;
@@ -45,14 +46,14 @@
       }
 
       :global(.bg) {
-        background-color: #F2F2F2;
+        background-color: $Color_Background;
     }
     /* html {
         height: 100%;
     } */
     main {
         flex: 0 1 95%;
-        background: lightblue;
+        background: $Color_Background;
     }
     footer {
         flex: 0 1 5%;

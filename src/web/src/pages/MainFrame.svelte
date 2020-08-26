@@ -104,7 +104,8 @@
 </section>
 
 
-<style>
+<style type="scss">
+    @import 'style/main.scss';
     section {
         height: 100%;
         display: flex;
@@ -114,7 +115,7 @@
 
     header {
         flex: 0 1 5%;
-        background: red;
+        background: $Color_Primary;
         border: black;
         border-style: solid;
         border-width: 0 0 2px 0;
@@ -148,11 +149,11 @@
 
 /* Add a red background color to navbar links on hover */
 .navbar a:hover, .dropdown:hover .dropbtn {
-  background-color: red;
+  background-color: $Color_Primary;
 }
 
 .dropdown-menu > div:hover {
     background-image: none;
-    background-color: red;
+    background-color: $Color_Primary;
 }
 </style>

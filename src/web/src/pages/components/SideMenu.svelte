@@ -255,10 +255,11 @@
         {/if}
 </section>
 
-<style>
-
+<style type="scss">
+    @import 'style/main.scss';
+    
     /* Device Styles */
-    .DeviceType {
+.DeviceType {
 
 }
 .DeviceType img {

@@ -1,5 +1,6 @@
-<style>	
-    form {
+<style type="scss">
+  @import 'style/main.scss';
+   form {
       background: #fff;
       padding: 50px;
       width: 250px;

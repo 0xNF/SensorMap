@@ -9,6 +9,20 @@ import copy from 'rollup-plugin-copy'
 
 const production = !process.env.ROLLUP_WATCH;
 
+const preprocessOptions = {
+	scss: {
+	  includePaths: [
+		'node_modules',
+		'src'
+	  ]
+	},
+	postcss: {
+	  plugins: [
+		require('autoprefixer'),
+	  ]
+	}
+  }
+
 function serve() {
 	let server;
 	
@@ -48,7 +62,7 @@ export default {
 			css: css => {
 				css.write('public/build/bundle.css');
 			},
-			preprocess: sveltePreprocess(),
+			preprocess: sveltePreprocess(preprocessOptions),
 		}),
 
 		// If you have external dependencies installed from

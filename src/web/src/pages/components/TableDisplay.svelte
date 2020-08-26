@@ -9,6 +9,7 @@
 Hello Table View
 </section>
 
-<style>
-
+<style type="scss">
+    @import 'style/main.scss';
+    
 </style>

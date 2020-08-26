@@ -11,7 +11,8 @@ import ""
     <p>Welcome this is my <b>{pageName}</b></p>
 </main>
 
-<style>
+<style type="scss">
+    @import 'style/main.scss';
     main {
         text-align: center;
         padding: 1em;
