@@ -1,5 +1,12 @@
 import * as Gravio from "./GravioModels";
 import { DeviceTypeMap } from "./GravioModels";
+import type { MapImage } from "./SmapModels";
+
+export const MapImages: { [key: string]: MapImage } = {
+    FloorReferenceFull: { Url:"assets/TestAssets/FloorReference.png", Height: 1536, Width: 2750 },
+    FloorReferenceWrong: { Url:"assets/TestAssets/FloorReference.png", Height: 1080, Width: 1920 },
+    FloorBlank2: { Url:"assets/TestAssets/FloorBlank2.png", Height: 1080, Width: 1920 }
+}
 
 export const Devices:{ [key: string]: Gravio.Device} = {
     Temperature0: new Gravio.Device("Temperature 0", 0, DeviceTypeMap.Aqara_Temperature, "0"),
@@ -16,14 +23,21 @@ export const Areas: { [key: string]: Gravio.Area } = {
 };
 
 export const Hubkits: { [key: string]: Gravio.Hubkit } = {
-    Hubkit0: new Gravio.Hubkit("Test GHub 0", [Areas.Area0], "127.0.0.1", "0xdeadbeef", null, "assets/TestAssets/FloorBlank2.png"),
+    Hubkit0: new Gravio.Hubkit("Test GHub 0", [Areas.Area0], "127.0.0.1", "0xdeadbeef", null, MapImages.FloorBlank2),
     Hubkit_NoAreas: new Gravio.Hubkit("No Areas Hubkit", [], "127.0.0.2", "0xfeedabba"),
     Hubkit_AreasButEmpty: new Gravio.Hubkit("Areas are Empty", [Areas.Empty0, Areas.Empty1, Areas.Empty2,], "127.0.0.3", "0xEmpty"),
+    Hubkit_ReferenceMap: new Gravio.Hubkit("Reference Map", [], "127.0.0.4", "reference_map_good", null, MapImages.FloorReferenceFull),
+    Hubkit_ReferenceMapBadDims: new Gravio.Hubkit("Bad Dimensions Map", [], "127.0.0.5", "reference_map_good", null, MapImages.FloorReferenceWrong),
+
+
 };
 
 export const SensorMaps: { [key: string]: Gravio.SensorMap } = {
     SensorMap0: new Gravio.SensorMap("0", Hubkits.Hubkit0, true, false),
     SensorMap1: new Gravio.SensorMap("1", Hubkits.Hubkit_NoAreas, false, false),
     SensorMap2: new Gravio.SensorMap("2", Hubkits.Hubkit_AreasButEmpty, false, true),
+    SensorMap3: new Gravio.SensorMap("3", Hubkits.Hubkit_ReferenceMap, false, true),
+    SensorMap4: new Gravio.SensorMap("4", Hubkits.Hubkit_ReferenceMapBadDims, false, true),
+
 
 };

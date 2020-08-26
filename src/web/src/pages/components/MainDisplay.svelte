@@ -108,6 +108,11 @@
         margin: 0;
       }
 
+    section > span  {
+        height: 100%;
+        width: 100%;
+    }
+
     header {
         flex: 0 1 5%;
         background: #82868C;

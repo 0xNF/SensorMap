@@ -1,5 +1,7 @@
 /* this file models items that deal directly with Gravio objects */
 
+import type { MapImage } from "./SmapModels";
+
 /** A Gravio Area with some additional SMAP specific stuff like Display Name and Map URL. Areas belong to Hubkits. */
 class Area {
     /** GUID of this Area, as known by Hubkit */
@@ -69,15 +71,15 @@ class Hubkit {
     /** User-overridable Display Name for map display purposes. Defaults to this.DeviceName if not supplied. */
     DisplayName?: string;
     /** url pointing to map image for this Hubkit. May be empty. */
-    MapUrl?: string;
+    MapUrl?: MapImage;
 
-    constructor(hubkitName: string, areas: Array<Area>, address: string, hubkitId: string, displayName?: string, mapUrl?: string,) {
+    constructor(hubkitName: string, areas: Array<Area>, address: string, hubkitId: string, displayName?: string, mapImage?: MapImage) {
         this.Id = hubkitId;
         this.HubkitName = hubkitName;
         this.Areas = areas;
         this.Address = address;
         this.DisplayName = displayName ?? hubkitName;
-        this.MapUrl = mapUrl;
+        this.MapUrl = mapImage;
     }
 }
 
