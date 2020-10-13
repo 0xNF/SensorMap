@@ -3,13 +3,13 @@ import requests
 import json
 import sys
 import ssl
-from datetime import datetime
+from datetime import datetime, timezone
 
 URL = "https://{0}:29444/gappapi"
 SERVER_IP = None
 HUBKIT_IP = "localhost"
 
-def fetchFromServer(url = URL, timestamp = datetime.now(), areaName = None):
+def fetchFromServer(url = URL, timestamp = datetime.utcnow(), areaName = None):
     dt = timestamp.isoformat(sep='T', timespec='auto')
     dataDict = {
         "DateFrom": dt
@@ -19,7 +19,7 @@ def fetchFromServer(url = URL, timestamp = datetime.now(), areaName = None):
     dataJsonString = json.dumps(dataDict)
     
     res = requests.post(url, data=dataJsonString, headers={"content-type": "application/json"}, verify=False)
-    if res.status_code is not 200:
+    if res.status_code != 200:
         print("failed to retreive data")
         print(res)
         print(res.text)
