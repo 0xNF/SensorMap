@@ -1,4 +1,5 @@
 let SVGROOT = null;
+const ROOM_NAMES = ["Scorpio", "Leo", "Aries", "Sagittarius", "Capricorn", "Taurus", "Gemini", "Cancer", "Aquarius", "Pisceslol"];
 let AREAIDX_2_ROOMNAME = {};
 let ROOMNAME_2_AREAIDX = {};
 const AREAS = {}
@@ -323,6 +324,10 @@ function recieveData(reading) {
 
     const areaName = reading["AreaName"];//AREAIDX_2_ROOMNAME[reading["areaIndex"]];
 
+    if(Object.keys.indexOf(areaName) == -1) {
+        return;
+    }
+
     switch(reading["DataType"]) {
         case "Temperature":
             UpdateTemperature(areaName, reading);
@@ -607,54 +612,55 @@ async function main() {
 
     [AREAIDX_2_ROOMNAME, ROOMNAME_2_AREAIDX] = assignRoomIdMap();
     
+    
     const rooms = [
-        new Room("Scorpio",
+        new Room(ROOM_NAMES[0] || "Scorpio",
             new Pos(250, -125, 1), /* room absolute position */
             new Pos(40, 0, 1), /* Label offset, relative to room offset */
         ),
-        new Room("Leo",
+        new Room(ROOM_NAMES[1] || "Leo",
             new Pos(180, -125, 1), /* room absolute position */
             new Pos(10,0, 1), /* Label offset, relative to room offset */
         ), 
-        new Room("Aries",
+        new Room(ROOM_NAMES[2] || "Aries",
             new Pos(112, -125, 1), /* room absolute position */
             new Pos(10, 0, 1), /* Label offset, relative to room offset */
         ),
-        new Room("Sagittarius",
+        new Room(ROOM_NAMES[3] || "Sagittarius",
             new Pos(18, -125, 1), /* room absolute position */
             new Pos(18, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room("Capricorn",
+        new Room(ROOM_NAMES[4] || "Capricorn",
             new Pos(-76, -125, 1), /* room absolute position */
             new Pos(18, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room("Taurus",
+        new Room(ROOM_NAMES[5] || "Taurus",
             new Pos(-153, -125, 1), /* room absolute position */
             new Pos(5, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room("Gemini",
+        new Room(ROOM_NAMES[6] || "Gemini",
             new Pos(-153, -31, 1), /* room absolute position */
             new Pos(5, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room("Cancer",
+        new Room(ROOM_NAMES[7] || "Cancer",
             new Pos(-153, 44, 1), /* room absolute position */
             new Pos(5, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room("Aquarius",
+        new Room(ROOM_NAMES[8] || "Aquarius",
             new Pos(-50, -31, 1), /* room absolute position */
             new Pos(10, 0, 1), /* Label offset, relative to room offset */
         ),
-        new Room("Pisces",
+        new Room(ROOM_NAMES[9] || "Pisces",
             new Pos(18, -31, 1), /* room absolute position */
             new Pos(7, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room("Libra",
+        new Room(ROOM_NAMES[10] || "Libra",
             new Pos(-50, 86, 1), /* room absolute position */
             new Pos(10, 0, 1), /* Label offset, relative to room offset */
         ),
