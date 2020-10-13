@@ -15,7 +15,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith('/fetch'):
             print(self.path)
-            dateFrom = datetime.now()
+            dateFrom = datetime.utcnow()
             areaName = None
             query = parse_qs(urlparse(self.path).query)
             if "datefrom" in query:
