@@ -58,7 +58,7 @@ def getUnique(areas):
     
     return auniq
 
-def FullFetch(hubkit_ip = HUBKIT_IP, timestamp = datetime.now(), areaName = None):
+def FullFetch(hubkit_ip = HUBKIT_IP, timestamp = datetime.utcnow(), areaName = None):
     url = URL.format(hubkit_ip)
     statusCode, json = fetchFromServer(url, timestamp, areaName) # Server supplied items
     if json is None:
