@@ -18,13 +18,14 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
             dateFrom = datetime.utcnow()
             areaName = None
             query = parse_qs(urlparse(self.path).query)
-            if "datefrom" in query:
-                dateFrom = query["datefrom"][0]
-                dateFrom = datetime.strptime(dateFrom, "%Y-%m-%dT%H:%M:%S.%fZ")
             if "areaname" in query:
                 areaName = query["areaname"][0]
             else:
-                dateFrom = datetime.now()
+                dateFrom = datetime.utcnow()
+            if "datefrom" in query:
+                dateFrom = query["datefrom"][0]
+                dateFrom = datetime.strptime(dateFrom, "%Y-%m-%dT%H:%M:%S.%fZ")
+            print("using: ")
             print(dateFrom)
             d = DataFromHubkit.FullFetch(URL, dateFrom, areaName)
             s = json.dumps(d)
@@ -47,7 +48,7 @@ if __name__ == "__main__":
     URL = args.url
     
     DIR = "src"
-    FETCHFROM = datetime.now()
+    FETCHFROM = datetime.utcnow()
     web_dir = os.path.join(os.path.dirname(__file__), DIR)
     os.chdir(web_dir)
 
