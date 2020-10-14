@@ -1,4 +1,4 @@
-The Smap2 branch, (nee Add_Svelte), is the current master branch for the 2.0 version of the SensorMap. 
+The Smap2 branch, (nėe map_display), is the current master branch for the 2.0 version of the SensorMap. 
 
 ## Installation
 TODO
