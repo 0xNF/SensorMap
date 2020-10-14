@@ -22,7 +22,7 @@
             "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:5000",
-            "webRoot": "${workspaceFolder}/src"
+            "webRoot": "${workspaceFolder}/src",
         }
     ]
 }
