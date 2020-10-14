@@ -156,7 +156,7 @@
                     <div class="CollapsableSectionHeader">
                         <h3>{hk.Hubkit.DisplayName}</h3>
                         <span class="ButtonGroup">
-                            <button title="Refresh" on:click={() => RefreshHubkits()}><img src="assets/refresh.svg" height="10" width="10"/></button>
+                            <button title="Refresh" on:click={() => RefreshHubkits()}><img src="assets/refresh.svg" alt="refresh" height="10" width="10"/></button>
                             <button  on:click={() => toggleHubkit(`${i}`)} title="Collapse this section">{ 
                                 $expandedHubkit === `${i}` ? "˄" : "˅"
                             }</button>
