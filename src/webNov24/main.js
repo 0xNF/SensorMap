@@ -244,6 +244,9 @@ function AddRoom(room, adds) {
     let Co2IconFlash = null;
     if (room.CO2.X !== 0) {
 
+        /* push calling down more */
+        calling.attr("y", parseFloat(roomHumidityNum.attr('y')) + 25)
+
         const roomCo2Icon = roomG.append("g").attr("id", `${room.Id}_co2`);
         
         Co2Icon = roomCo2Icon.append("svg:image")
@@ -255,14 +258,14 @@ function AddRoom(room, adds) {
         .attr("xlink:href", "co2.png");
 
         Co2Text = roomCo2Icon.append("text")
-        .text("200ppm")
+        .text("1,200 ppm")
         .attr("id", `${room.Id}_co2_text`)
-        .attr("x", room.Label.X + 48)
+        .attr("x", room.Label.X + 15)
         .attr("y", room.Label.Y + 66)
         .attr("fill", "black")
         .attr("font-size", 8 * 0.9)
         .attr("font-family", "verdana")
-        .attr("text-anchor", "end");
+        .attr("text-anchor", "start");
 
         let flashSubTimerCo2 = null;
         const flashOnFlashOffCo2 = () => {
@@ -465,6 +468,7 @@ function ButtonLongRelease(roomName, reading) {
 }
 
 function UpdateCo2Data(roomName, reading) {
+    updateEntryInTable(roomName, "co2data", reading.Data, reading["Timestamp"]);
     console.log(`${roomName}:: CO2 update received`);
     let d = Math.ceil(reading.Data);
     if (d >= 1000) {
@@ -481,7 +485,6 @@ function UpdateCo2Data(roomName, reading) {
             AREAS[roomName].CO2.Icon.attr("fill", "orange");
             AREAS[roomName].CO2.Text.attr("fill", "orange");
             AREAS[roomName].CO2.FlashTimerFunc.stop();
-            roomCo2Icon.attr("hidden", null);
         }
     }
     else {
@@ -492,7 +495,8 @@ function UpdateCo2Data(roomName, reading) {
         }
     }
     if(AREAS[roomName].CO2.Text != null) {
-        AREAS[roomName].CO2.Text.text(`${d}ppm`);
+        const dtext = Number(d).toLocaleString();
+        AREAS[roomName].CO2.Text.text(`${dtext} ppm`);
     }
 }
 
@@ -572,6 +576,22 @@ function updateEntryInTable(roomName, type, text, timestamp) {
         }
         else {
             entry.className = "available";
+        }
+    }
+    let dataText = text;
+    if (typeof(text) === 'number') {
+        dataText = Number(text).toLocaleString();
+    }
+    if (type === "co2data") {
+        entry.innerText = dataText + " ppm";
+        if (text >= 1000) {
+            entry.style = "color: red";
+        }
+        else if (text >= 700) {
+            entry.style = "color: orange";
+        }
+        else {
+            entry.style = "color: black";
         }
     }
 }
@@ -654,8 +674,9 @@ function addRoomToTable(room) {
     tr.append(maketd(getOccupiedText(), "occupied", "available")); /* room occupied? */
     tr.append(maketd("0 °C", "temperature")); /* last known temperature */
     tr.append(maketd("0%", "humidity")); /* last known humidity */
-    tr.append(maketd("n/a", "calldate")); /* last known call date */
-    tr.append(maketd("n/a", "urgentcalldate")); /* last known urgent call date */
+    tr.append(maketd("-", "co2data")); /* last known CO2 update - not all rooms have this */
+    tr.append(maketd("-", "calldate")); /* last known call date */
+    tr.append(maketd("-", "urgentcalldate")); /* last known urgent call date */
 
     document.getElementById("roomTableBody").append(tr);
 }
@@ -744,8 +765,8 @@ async function main() {
     ];
 
     /** add CO2 data */
-    rooms[1].CO2 = new Pos(10,10,0.7);
-    rooms[2].CO2 = new Pos(10,10,0.7);
+    rooms[1].CO2 = new Pos(10,300,0.7);
+    rooms[2].CO2 = new Pos(10,300,0.7);
 
     rooms.forEach((x) => {
         AREAS[x.Name] = AddRoom(x)
