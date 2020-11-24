@@ -21,7 +21,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
             if "datefrom" in query:
                 dateFrom = query["datefrom"][0]
                 dateFrom = datetime.strptime(dateFrom, "%Y-%m-%dT%H:%M:%S.%fZ")
-            if "areaname" in query:
+            elif "areaname" in query:
                 areaName = query["areaname"][0]
             else:
                 dateFrom = datetime.now()
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     BIND = args.bind
     URL = args.url
     
-    DIR = "src"
+    DIR = "src/webNov24"
     FETCHFROM = datetime.now()
     web_dir = os.path.join(os.path.dirname(__file__), DIR)
     os.chdir(web_dir)
