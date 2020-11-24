@@ -21,7 +21,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
             if "datefrom" in query:
                 dateFrom = query["datefrom"][0]
                 dateFrom = datetime.strptime(dateFrom, "%Y-%m-%dT%H:%M:%S.%fZ")
-            if "areaname" in query:
+            elif "areaname" in query:
                 areaName = query["areaname"][0]
             else:
                 dateFrom = datetime.now()

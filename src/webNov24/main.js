@@ -369,7 +369,8 @@ async function LoadSVG(fname) {
 
 function recieveData(reading) {
 
-    const areaName = reading["AreaName"];//AREAIDX_2_ROOMNAME[reading["areaIndex"]];
+    const areaName = reading["AreaName"];
+    console.log(reading);
 
     switch(reading["DataType"]) {
         case "Temperature":
@@ -396,6 +397,9 @@ function recieveData(reading) {
                         ButtonLongRelease(areaName, reading); /* unused */
                         break;
                     }
+            break;
+        case "CO2":
+            UpdateCo2Data(areaName, reading);
             break;
         default:
             break;

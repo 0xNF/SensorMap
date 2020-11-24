@@ -19,12 +19,14 @@ def fetchFromServer(url = URL, timestamp = datetime.now(), areaName = None):
     dataJsonString = json.dumps(dataDict)
     
     res = requests.post(url, data=dataJsonString, headers={"content-type": "application/json"}, verify=False)
+    print(dataJsonString)
     if res.status_code is not 200:
         print("failed to retreive data")
         print(res)
         print(res.text)
         return (res.status_code, None)
     j = res.json()
+    print(j)
     return (res.status_code, j["Result"])
 
 def groupByArea(d):
