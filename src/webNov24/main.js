@@ -370,8 +370,6 @@ async function LoadSVG(fname) {
 function recieveData(reading) {
 
     const areaName = reading["AreaName"];
-    console.log(reading);
-
     switch(reading["DataType"]) {
         case "Temperature":
             UpdateTemperature(areaName, reading);
@@ -667,7 +665,6 @@ async function FetchUpdates() {
     const lrd = new Date();
     document.getElementById("lastRequestedDate").innerText = lrd;
     q =`/fetch?datefrom=${LastFetchDate.toISOString()}`;
-    console.log("PRINTING")
     console.log(q)
     const fetched = await fetch(q, {"method": "GET"});
     const json = await fetched.json();
@@ -679,14 +676,15 @@ async function FetchUpdates() {
             latestTimestamp = reading["Timestamp"];
         });
     });
-    document.getElementById("lastDataAtDate").innerText = new Date(latestTimestamp);
+    if(latestTimestamp !== "" && latestTimestamp !== undefined) {
+        document.getElementById("lastDataAtDate").innerText = new Date(latestTimestamp);
+    }
     LastFetchDate = lrd;
 }
 
 
 async function main() {
 
-    console.log("ayyyyyy");
     SVGROOT = selectRoot();
     const room2 = AddFloor();
 

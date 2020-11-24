@@ -26,7 +26,6 @@ def fetchFromServer(url = URL, timestamp = datetime.now(), areaName = None):
         print(res.text)
         return (res.status_code, None)
     j = res.json()
-    print(j)
     return (res.status_code, j["Result"])
 
 def groupByArea(d):

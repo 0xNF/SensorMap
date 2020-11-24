@@ -25,7 +25,6 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
                 areaName = query["areaname"][0]
             else:
                 dateFrom = datetime.now()
-            print(dateFrom)
             d = DataFromHubkit.FullFetch(URL, dateFrom, areaName)
             s = json.dumps(d)
             self.send_response(200)
