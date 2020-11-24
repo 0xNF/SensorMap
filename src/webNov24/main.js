@@ -206,6 +206,17 @@ function AddRoom(room, adds) {
         .attr("font-family", "verdana")
         .attr("text-anchor", "end");
 
+    const temperatureIcon = roomG.append("svg:image")
+        .attr("id", `${room.Id}_temp_icon`)
+        .attr("x", parseFloat(roomTemperatureNum.attr('x')) -40)
+        .attr("y", roomPeopleY + 30)
+        .attr('width', 10)
+        .attr('height', 10)
+        .attr("xlink:href", "temperature.png");
+
+       
+
+
     const roomHumidityNum = roomG.append("text")
         .text("0 %")
         .attr("id", `${room.Id}_humidity`)
@@ -215,6 +226,14 @@ function AddRoom(room, adds) {
         .attr("font-size", 8 * 0.9)
         .attr("font-family", "verdana")
         .attr("text-anchor", "end");
+
+    const humidityIcon = roomG.append("svg:image")
+        .attr("id", `${room.Id}_hum_icon`)
+        .attr("x", parseFloat(roomTemperatureNum.attr('x')) -40)
+        .attr("y", parseFloat(roomTemperatureNum.attr('y')) + 2)
+        .attr('width', 10)
+        .attr('height', 10)
+        .attr("xlink:href", "humidity.png");
 
 
     const calling = roomG.append("text")
@@ -253,15 +272,15 @@ function AddRoom(room, adds) {
         .attr("id", `${room.Id}_co2_icon`)
         .attr('x', room.Label.X)
         .attr('y', room.Label.Y + 55)
-        .attr('width', 15)
-        .attr('height', 15)
+        .attr('width', 10)
+        .attr('height', 10)
         .attr("xlink:href", "co2.png");
 
         Co2Text = roomCo2Icon.append("text")
         .text("1,200 ppm")
         .attr("id", `${room.Id}_co2_text`)
         .attr("x", room.Label.X + 15)
-        .attr("y", room.Label.Y + 66)
+        .attr("y", room.Label.Y + 63)
         .attr("fill", "black")
         .attr("font-size", 8 * 0.9)
         .attr("font-family", "verdana")
