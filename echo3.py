@@ -46,7 +46,7 @@ if __name__ == "__main__":
     BIND = args.bind
     URL = args.url
     
-    DIR = "src"
+    DIR = "src/webNov24"
     FETCHFROM = datetime.now()
     web_dir = os.path.join(os.path.dirname(__file__), DIR)
     os.chdir(web_dir)
