@@ -53,19 +53,20 @@ function DEMO_ENGAGE() {
             let final = base - num
             UpdateHumidity(key, {Data: final});
         });
-
-        function SetOccupied() {
-            UpdateOccupied("Libra", {Data: true});
-        }
-
-        function SetRegularCall() {
-            RequestSecretary("Leo", {Data: true, Timestamp: new Date()});
-        }
-
-        function SetUrgentCall() {
-            RequestUrgent("Scorpio", {Data: true, Timestamp: new Date()});
-        }
     }
+
+    function SetOccupied() {
+        UpdateOccupied("Libra", {Data: true});
+    }
+
+    function SetRegularCall() {
+        RequestSecretary("Leo", {Data: true, Timestamp: new Date()});
+    }
+
+    function SetUrgentCall() {
+        RequestUrgent("Scorpio", {Data: true, Timestamp: new Date()});
+    }
+    
 
     function timerFunc() {
         SetTemperatures();
@@ -478,6 +479,7 @@ async function LoadSVG(fname) {
     return 0;
 }
 
+firstTimeouts = {}
 function recieveData(reading) {
 
     const areaName = reading["AreaName"];
@@ -489,7 +491,31 @@ function recieveData(reading) {
             UpdateHumidity(areaName, reading);
             break;
         case "Motion Detected": // TODO figure out what an occupied event looks like
+            console.log(reading);
             UpdateOccupied(areaName, reading);
+            // if (isFirstReading) {
+            let d = new Date(Date.parse(reading["Timestamp"])); /* date of most recent Motion sensor */
+            let expiresAt = Math.floor(d.getTime() / 1000) + OCCUPANCY_TIMEOUT_SECS; /* unix timestamp (secs) of when this occupied reading should expire */
+            let diffNowThen = expiresAt - (Math.floor(new Date().getTime()) / 1000);
+            if (diffNowThen <= 0) {
+                /* we overshot it, immediately undo the occupancy */
+                console.log("Occupied reading for " + areaName + " has expired. Resetting.");
+                UpdateOccupied(areaName, {Data: false});
+            } else {
+                /* set a single fire timer to run out in remaining seconds */
+                console.log("First read Occupancy for " + areaName + " will reset in " + diffNowThen + " seconds");
+                let firstTimeoutPointer = setTimeout(() => {
+                    console.log("Running single shot occupancy undo for " + areaName);
+                    UpdateOccupied(areaName, {Data: false});
+                }, diffNowThen * 1000);
+                firstTimeouts[areaName] = firstTimeoutPointer;
+            }
+            
+            //  else if(firstTimeouts[areaName] !== undefined) {
+            //     /* if a first-time timer is pending, but a motion reading for the room was seen, kill the pending timer */
+            //     console.log("A first-read Occupancy timer for " + areaName + " was pending, but a more recent Motion data was received. Clearing the timeout.");
+            //     clearTimeout(firstTimeouts[areaName]);
+            // }
             break;
         case "Button press":
                 switch (reading.Data) {
@@ -774,7 +800,7 @@ function addRoomToTable(room) {
     document.getElementById("roomTableBody").append(tr);
 }
 
-
+let isFirstReading = false
 async function FetchUpdates() {
     const lrd = new Date();
     document.getElementById("lastRequestedDate").innerText = lrd;
@@ -790,6 +816,7 @@ async function FetchUpdates() {
             latestTimestamp = reading["Timestamp"];
         });
     });
+    isFirstReading = false; /* only once and never again */
     if(latestTimestamp !== "" && latestTimestamp !== undefined) {
         document.getElementById("lastDataAtDate").innerText = new Date(latestTimestamp);
     }
@@ -939,7 +966,7 @@ async function main() {
     // rooms[2].CO2 = new Pos(10,300,0.7);
 
     rooms.forEach((x) => {
-        AREAS[x.Name] = AddRoom(x)
+        AREAS[x.Name] = AddRoom(x);
         addRoomToTable(x);
     });
 
@@ -948,6 +975,8 @@ async function main() {
 
     LastFetchDate = new Date();
     LastFetchDate = new Date(LastFetchDate.setDate(LastFetchDate.getDate() - 1));
+    isFirstReading = true;
+    FetchUpdates(); /* fetch updated immediately on page load */
     fetchTimer = setInterval(FetchUpdates, FETCH_LATEST_FROM_SERVER_SECS * 1000);
 
 
