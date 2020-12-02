@@ -501,15 +501,16 @@ function recieveData(reading) {
                 /* we overshot it, immediately undo the occupancy */
                 console.log("Occupied reading for " + areaName + " has expired. Resetting.");
                 UpdateOccupied(areaName, {Data: false});
-            } else {
-                /* set a single fire timer to run out in remaining seconds */
-                console.log("First read Occupancy for " + areaName + " will reset in " + diffNowThen + " seconds");
-                let firstTimeoutPointer = setTimeout(() => {
-                    console.log("Running single shot occupancy undo for " + areaName);
-                    UpdateOccupied(areaName, {Data: false});
-                }, diffNowThen * 1000);
-                firstTimeouts[areaName] = firstTimeoutPointer;
             }
+            // else {
+            //     /* set a single fire timer to run out in remaining seconds */
+            //     console.log("First read Occupancy for " + areaName + " will reset in " + diffNowThen + " seconds");
+            //     let firstTimeoutPointer = setTimeout(() => {
+            //         console.log("Running single shot occupancy undo for " + areaName);
+            //         UpdateOccupied(areaName, {Data: false});
+            //     }, diffNowThen * 1000);
+            //     firstTimeouts[areaName] = firstTimeoutPointer;
+            // }
             
             //  else if(firstTimeouts[areaName] !== undefined) {
             //     /* if a first-time timer is pending, but a motion reading for the room was seen, kill the pending timer */
