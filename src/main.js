@@ -3,8 +3,8 @@ const ROOM_NAMES = ["Scorpio", "Leo", "Aries", "Sagittarius", "Capricorn", "Taur
 let AREAIDX_2_ROOMNAME = {};
 let ROOMNAME_2_AREAIDX = {};
 const AREAS = {}
-const FETCH_LATEST_FROM_SERVER_SECS = 5; /* how often to retrieve non-critical data from the server (temp, humidity) */
-let OCCUPANCY_TIMEOUT_SECS = FETCH_LATEST_FROM_SERVER_SECS * 2; /* Occupancy does not report "no people", so we set a timeout to say "no people" off after no readings for some amount of seconds*/
+const FETCH_LATEST_FROM_SERVER_SECS = 15; /* how often to retrieve non-critical data from the server (temp, humidity) */
+const OCCUPANCY_TIMEOUT_SECS = FETCH_LATEST_FROM_SERVER_SECS * 2; /* Occupancy does not report "no people", so we set a timeout to say "no people" off after no readings for some amount of seconds*/
 
 let LastFetchDate = new Date();
 
@@ -198,7 +198,7 @@ function AddRoom(room) {
 
         
     const roomTemperatureNum = roomG.append("text")
-        .text("32.3 °C")
+        .text("0 °C")
         .attr("id", `${room.Id}_temperture`)
         .attr("x", (roomPeopleX + (parseFloat(roomPeopleRect.attr('width')) / 2) + 5))
         .attr("y", roomPeopleY + 38)
@@ -213,6 +213,16 @@ function AddRoom(room) {
         .attr("id", `${room.Id}_humidity`)
         .attr("x", parseFloat(roomTemperatureNum.attr('x')))
         .attr("y", parseFloat(roomTemperatureNum.attr('y')) + 10)
+        .attr("fill", "black")
+        .attr("font-size", 8 * 0.9)
+        .attr("font-family", "verdana")
+        .attr("text-anchor", "end");
+
+    const roomCo2Num = roomG.append("text")
+        .text("0 ppm")
+        .attr("id", `${room.Id}_co2`)
+        .attr('x', parseFloat(roomHumidityNum.attr('x')))
+        .attr('y', parseFloat(roomHumidityNum.attr('y')) + 10)
         .attr("fill", "black")
         .attr("font-size", 8 * 0.9)
         .attr("font-family", "verdana")
@@ -273,6 +283,7 @@ function AddRoom(room) {
         calling: calling,
         temperatureNum: roomTemperatureNum,
         humidityNum: roomHumidityNum,
+        co2Num: roomCo2Num,
     };
 
     return roomObj;
@@ -387,7 +398,7 @@ function UpdateCO2(roomName, reading) {
     console.log(`${roomName}:: CO2 is ${reading.Data}%`);
     changeHumidityicon(roomName, reading.Data);
     const co2Text = changeCo2Text(roomName, reading.Data);
-    updateEntryInTable(roomName, "CO2", co2Text, reading["Timestamp"]);
+    updateEntryInTable(roomName, "co2", co2Text, reading["Timestamp"]);
 }
 
 
@@ -452,8 +463,8 @@ function changeHumidityText(roomName, data) {
 }
 
 function changeCo2Text(roomName, data) {
-    const s = `${data} %`;
-    AREAS[roomName].humidityNum.text(s);
+    const s = `${data} ppm`;
+    AREAS[roomName].co2Num.text(s);
     return s;
 }
 
@@ -593,6 +604,7 @@ function addRoomToTable(room) {
     tr.append(maketd(getOccupiedText(), "occupied", "available")); /* room occupied? */
     tr.append(maketd("0 °C", "temperature")); /* last known temperature */
     tr.append(maketd("0%", "humidity")); /* last known humidity */
+    tr.append(maketd("0ppm", "co2")); /* last known CO2 reading */
     tr.append(maketd("n/a", "calldate")); /* last known call date */
     tr.append(maketd("n/a", "urgentcalldate")); /* last known urgent call date */
 
