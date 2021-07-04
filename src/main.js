@@ -329,16 +329,18 @@ function recieveData(reading) {
     }
 
     switch(reading["DataType"]) {
-        case "Temperature":
+        case "24ce6d4d-ff08-46b5-ab6c-d8fdd50eea94":
             UpdateTemperature(areaName, reading);
             break;
-        case "Humidity":
+        case "4723d025-a1f2-431c-8e75-a9ba350ceae5":
             UpdateHumidity(areaName, reading);
             break;
-        case "Motion Detected": // TODO figure out what an occupied event looks like
+        case "fafd5c5c-6415-4def-83d3-986913546c67": // TODO figure out what an occupied event looks like
             UpdateOccupied(areaName, reading);
             break;
-        case "Button press":
+        case "7e87a819-135e-40d3-9d5f-c0330f38ec4e":
+            UpdateCO2(areaName, reading)
+        case "e2233655-dadc-45f0-a4f0-5ac31b3874f3":
                 switch (reading.Data) {
                     case 1: // single press
                         RequestSecretary(areaName, reading);
@@ -380,6 +382,14 @@ function UpdateHumidity(roomName, reading) {
     const humidText = changeHumidityText(roomName, reading.Data);
     updateEntryInTable(roomName, "humidity", humidText, reading["Timestamp"]);
 }
+
+function UpdateCO2(roomName, reading) {
+    console.log(`${roomName}:: CO2 is ${reading.Data}%`);
+    changeHumidityicon(roomName, reading.Data);
+    const co2Text = changeCo2Text(roomName, reading.Data);
+    updateEntryInTable(roomName, "CO2", co2Text, reading["Timestamp"]);
+}
+
 
 function UpdateOccupied(roomName, reading) {
     console.log(`${roomName}:: occupied? ${reading.Data}`);
@@ -436,6 +446,12 @@ function changeTemperatureText(roomName, data) {
 }
 
 function changeHumidityText(roomName, data) {
+    const s = `${data} %`;
+    AREAS[roomName].humidityNum.text(s);
+    return s;
+}
+
+function changeCo2Text(roomName, data) {
     const s = `${data} %`;
     AREAS[roomName].humidityNum.text(s);
     return s;
