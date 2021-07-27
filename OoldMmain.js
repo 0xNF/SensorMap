@@ -1,10 +1,9 @@
 let SVGROOT = null;
-const ROOM_NAMES = ["Scorpio", "Leo", "Aries", "Sagittarius", "Capricorn", "Taurus", "Gemini", "Cancer", "Aquarius", "Pisceslol"];
 let AREAIDX_2_ROOMNAME = {};
 let ROOMNAME_2_AREAIDX = {};
 const AREAS = {}
-const FETCH_LATEST_FROM_SERVER_SECS = 15; /* how often to retrieve non-critical data from the server (temp, humidity) */
-const OCCUPANCY_TIMEOUT_SECS = FETCH_LATEST_FROM_SERVER_SECS * 2; /* Occupancy does not report "no people", so we set a timeout to say "no people" off after no readings for some amount of seconds*/
+const FETCH_LATEST_FROM_SERVER_SECS = 5; /* how often to retrieve non-critical data from the server (temp, humidity) */
+let OCCUPANCY_TIMEOUT_SECS = 240; /* 4 minutes */ //FETCH_LATEST_FROM_SERVER_SECS * 2; /* Occupancy does not report "no people", so we set a timeout to say "no people" off after no readings for some amount of seconds*/
 
 let LastFetchDate = new Date();
 
@@ -19,10 +18,9 @@ const ROOM_OCCUPIED_EN = "In Use";
 const REQUEST_NORMAL = "呼出中　Calling";
 const REQUEST_URGENT = "緊急 Urgent";
 
-const IS_DEMO = false;
+const IS_DEMO = true;
 
 function DEMO_ENGAGE() {
-    console.log("ayy");
     /**
      * Demo enage:
      * Starts with all temperatures set to 23.5c
@@ -31,8 +29,9 @@ function DEMO_ENGAGE() {
      * After 3 seconds: one room gets regular call
      * After 3 seconds: one room gets Emergency call
      */
+
      function SetTemperatures() {
-         const temps = [0.0, 0.2, 0.3, 0.5, 0.7, 0.8, 1, 1.2];
+         const temps = [0.0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.2];
          const base = 24.3;
          Object.keys(AREAS).forEach(key => {
              let num = temps[Math.floor(Math.random() * temps.length)];
@@ -47,27 +46,26 @@ function DEMO_ENGAGE() {
      }
 
      function SetHumidity() {
-        const nums = [0,1,2,-1];
+        const nums = [0,1,2];
         const base = 50;
         Object.keys(AREAS).forEach(key => {
             let num = nums[Math.floor(Math.random() * nums.length)];
             let final = base - num
             UpdateHumidity(key, {Data: final});
         });
-    }
 
-    function SetOccupied() {
-        UpdateOccupied("Libra", {Data: true});
-    }
+        function SetOccupied() {
+            UpdateOccupied("Libra", {Data: true});
+        }
 
-    function SetRegularCall() {
-        RequestSecretary("Leo", {Data: true, Timestamp: new Date()});
-    }
+        function SetRegularCall() {
+            RequestSecretary("Leo", {Data: true, Timestamp: new Date()});
+        }
 
-    function SetUrgentCall() {
-        RequestUrgent("Scorpio", {Data: true, Timestamp: new Date()});
+        function SetUrgentCall() {
+            RequestUrgent("Scorpio", {Data: true, Timestamp: new Date()});
+        }
     }
-    
 
     function timerFunc() {
         SetTemperatures();
@@ -77,7 +75,7 @@ function DEMO_ENGAGE() {
         SetUrgentCall();
     }
 
-    setTimeout(() => timerFunc(), 3000);
+    setTimeout(() => timerFunc(), 3);
     
 }
 
@@ -159,7 +157,7 @@ function AddFloor() {
         .attr('y', 50);
 }
 
-function AddRoom(room) {
+function AddRoom(room, adds) {
     
     const roomG = d3.select("#room").append("g")
         .attr("id", room.Id)
@@ -198,7 +196,7 @@ function AddRoom(room) {
 
         
     const roomTemperatureNum = roomG.append("text")
-        .text("0 °C")
+        .text("32.3 °C")
         .attr("id", `${room.Id}_temperture`)
         .attr("x", (roomPeopleX + (parseFloat(roomPeopleRect.attr('width')) / 2) + 5))
         .attr("y", roomPeopleY + 38)
@@ -207,6 +205,17 @@ function AddRoom(room) {
         // .attr("font-weight", "bold")
         .attr("font-family", "verdana")
         .attr("text-anchor", "end");
+
+    const temperatureIcon = roomG.append("svg:image")
+        .attr("id", `${room.Id}_temp_icon`)
+        .attr("x", parseFloat(roomTemperatureNum.attr('x')) -40)
+        .attr("y", roomPeopleY + 30)
+        .attr('width', 10)
+        .attr('height', 10)
+        .attr("xlink:href", "temperature.png");
+
+       
+
 
     const roomHumidityNum = roomG.append("text")
         .text("0 %")
@@ -218,26 +227,20 @@ function AddRoom(room) {
         .attr("font-family", "verdana")
         .attr("text-anchor", "end");
 
-        let roomCo2Num = null;
-        if (room.hasCo2) {
-            roomCo2Num = roomG.append("text")
-                .text("0 ppm")
-                .attr("id", `${room.Id}_co2`)
-                .attr('x', parseFloat(roomHumidityNum.attr('x')))
-                .attr('y', parseFloat(roomHumidityNum.attr('y')) + 10)
-                .attr("fill", "black")
-                .attr("font-size", 8 * 0.9)
-                .attr("font-family", "verdana")
-                .attr("text-anchor", "end");
-        }
+    const humidityIcon = roomG.append("svg:image")
+        .attr("id", `${room.Id}_hum_icon`)
+        .attr("x", parseFloat(roomTemperatureNum.attr('x')) -40)
+        .attr("y", parseFloat(roomTemperatureNum.attr('y')) + 2)
+        .attr('width', 10)
+        .attr('height', 10)
+        .attr("xlink:href", "humidity.png");
 
 
-    const callingPushY = roomCo2Num == null ? roomHumidityNum.attr('y') : roomCo2Num.attr('y');
     const calling = roomG.append("text")
         .text(REQUEST_NORMAL)
         .attr("id", `${room.Id}_calling`)
         .attr('x', (roomPeopleX + (parseFloat(roomPeopleRect.attr('width')) / 2)) - 10)
-        .attr('y', parseFloat(callingPushY) + 10)
+        .attr('y', parseFloat(roomHumidityNum.attr('y')) + 10)
         .attr("fill", "red")
         .attr("font-size", 8 * 0.7)
         .attr("font-family", "verdana")
@@ -253,8 +256,49 @@ function AddRoom(room) {
         .attr("font-weight", "bold")
         .attr("font-family", "verdana")
         .attr("text-anchor", "middle");
+
+    /** add Co2 */
+    let Co2Icon = null;
+    let Co2Text = null;
+    let Co2IconFlash = null;
+    if (room.CO2.X !== 0) {
+
+        /* push calling down more */
+        calling.attr("y", parseFloat(roomHumidityNum.attr('y')) + 25)
+
+        const roomCo2Icon = roomG.append("g").attr("id", `${room.Id}_co2`);
         
-        
+        Co2Icon = roomCo2Icon.append("svg:image")
+        .attr("id", `${room.Id}_co2_icon`)
+        .attr('x', room.Label.X)
+        .attr('y', room.Label.Y + 55)
+        .attr('width', 10)
+        .attr('height', 10)
+        .attr("xlink:href", "co2.png");
+
+        Co2Text = roomCo2Icon.append("text")
+        .text("1,200 ppm")
+        .attr("id", `${room.Id}_co2_text`)
+        .attr("x", room.Label.X + 15)
+        .attr("y", room.Label.Y + 63)
+        .attr("fill", "black")
+        .attr("font-size", 8 * 0.9)
+        .attr("font-family", "verdana")
+        .attr("text-anchor", "start");
+
+        let flashSubTimerCo2 = null;
+        const flashOnFlashOffCo2 = () => {
+            const flashOffSecs = 0.5;
+            Co2Text.attr("hidden", null);
+            flashSubTimerCo2 = setTimeout(() => { /* then start timer to turn back to black */
+                Co2Text.attr("hidden", HIDDEN);
+                }, 1000 * flashOffSecs);
+        }
+        Co2IconFlash = new Timer(flashOnFlashOffCo2, 1000 * 1, () => {
+            clearTimeout(flashSubTimerCo2); 
+            Co2Text.attr("hidden", null);
+        });
+    }
 
     const pTimer = new Timer(() => {UpdateOccupied(room.Name, {Data: false})}, 1000 * OCCUPANCY_TIMEOUT_SECS);
     pTimer.start(); /* immediately start the people-to-black timer */
@@ -268,8 +312,13 @@ function AddRoom(room) {
                 calling.attr("hidden", HIDDEN);
             }, 1000 * flashOffSecs);
     }
+
+
     /* we do not start this timer automatically. It is only when the duress button is pressed */
     const bTimer = new Timer(flashOnFlashOff, 1000 * 1, () => {clearTimeout(flashSubTimer); calling.attr("hidden", null)});
+
+
+
 
     roomObj =  {
         roomId: room.Id,
@@ -287,7 +336,11 @@ function AddRoom(room) {
         calling: calling,
         temperatureNum: roomTemperatureNum,
         humidityNum: roomHumidityNum,
-        co2Num: roomCo2Num || null,
+        CO2: {
+            Icon: Co2Icon,
+            Text: Co2Text,
+            FlashTimerFunc: Co2IconFlash,
+        },
     };
 
     return roomObj;
@@ -319,14 +372,14 @@ class Pos {
 };
 
 class Room {
-    constructor(name, hasCo2, roomPos, labelPos, peoplePos, roomDimensions) {
+    constructor(name, roomPos, labelPos, peoplePos, roomDimensions, co2Pos) {
         this.Id =  name.toLowerCase().replace(/ /g, '_')|| "-1";
         this.Name = name || "n/a";
         this.Room = roomPos; /* the coordinates that will act as the (0,0) for the room, for the other Pos objects */
         this.Label = labelPos || new Pos();
         this.People = peoplePos || new Pos();
         this.Dimensions = roomDimensions || new Pos();
-        this.hasCo2 = hasCo2;
+        this.CO2 = co2Pos || new Pos();
     }
 }
 
@@ -338,25 +391,18 @@ async function LoadSVG(fname) {
 
 function recieveData(reading) {
 
-    const areaName = reading["AreaName"];//AREAIDX_2_ROOMNAME[reading["areaIndex"]];
-
-    if(Object.keys.indexOf(areaName) == -1) {
-        return;
-    }
-
+    const areaName = reading["AreaName"];
     switch(reading["DataType"]) {
-        case "24ce6d4d-ff08-46b5-ab6c-d8fdd50eea94":
+        case "Temperature":
             UpdateTemperature(areaName, reading);
             break;
-        case "4723d025-a1f2-431c-8e75-a9ba350ceae5":
+        case "Humidity":
             UpdateHumidity(areaName, reading);
             break;
-        case "fafd5c5c-6415-4def-83d3-986913546c67": // TODO figure out what an occupied event looks like
+        case "Motion Detected": // TODO figure out what an occupied event looks like
             UpdateOccupied(areaName, reading);
             break;
-        case "7e87a819-135e-40d3-9d5f-c0330f38ec4e":
-            UpdateCO2(areaName, reading)
-        case "e2233655-dadc-45f0-a4f0-5ac31b3874f3":
+        case "Button press":
                 switch (reading.Data) {
                     case 1: // single press
                         RequestSecretary(areaName, reading);
@@ -371,6 +417,9 @@ function recieveData(reading) {
                         ButtonLongRelease(areaName, reading); /* unused */
                         break;
                     }
+            break;
+        case "CO2":
+            UpdateCo2Data(areaName, reading);
             break;
         default:
             break;
@@ -398,14 +447,6 @@ function UpdateHumidity(roomName, reading) {
     const humidText = changeHumidityText(roomName, reading.Data);
     updateEntryInTable(roomName, "humidity", humidText, reading["Timestamp"]);
 }
-
-function UpdateCO2(roomName, reading) {
-    console.log(`${roomName}:: CO2 is ${reading.Data}%`);
-    changeHumidityicon(roomName, reading.Data);
-    const co2Text = changeCo2Text(roomName, reading.Data);
-    updateEntryInTable(roomName, "co2", co2Text, reading["Timestamp"]);
-}
-
 
 function UpdateOccupied(roomName, reading) {
     console.log(`${roomName}:: occupied? ${reading.Data}`);
@@ -445,6 +486,39 @@ function ButtonLongRelease(roomName, reading) {
     // console.log(`${roomName}:: Long release received, but ignored because NYI`);
 }
 
+function UpdateCo2Data(roomName, reading) {
+    updateEntryInTable(roomName, "co2data", reading.Data, reading["Timestamp"]);
+    console.log(`${roomName}:: CO2 update received`);
+    let d = Math.ceil(reading.Data);
+    if (d >= 1000) {
+        /* set Warning *red* */
+        if (AREAS[roomName].CO2.Icon != null) {
+            AREAS[roomName].CO2.Icon.attr("fill", "red");
+            AREAS[roomName].CO2.Text.attr("fill", "red");
+            AREAS[roomName].CO2.FlashTimerFunc.start();
+        }
+    }
+    else if (d >= 700) {
+        /* set Notice (yellow) */
+        if (AREAS[roomName].CO2.Icon != null) {
+            AREAS[roomName].CO2.Icon.attr("fill", "orange");
+            AREAS[roomName].CO2.Text.attr("fill", "orange");
+            AREAS[roomName].CO2.FlashTimerFunc.stop();
+        }
+    }
+    else {
+        if (AREAS[roomName].CO2.Icon != null) {
+            AREAS[roomName].CO2.Icon.attr("fill", "black");
+            AREAS[roomName].CO2.Text.attr("fill", "black");
+            AREAS[roomName].CO2.FlashTimerFunc.stop();
+        }
+    }
+    if(AREAS[roomName].CO2.Text != null) {
+        const dtext = Number(d).toLocaleString();
+        AREAS[roomName].CO2.Text.text(`${dtext} ppm`);
+    }
+}
+
 
 /* returns the old color */
 function changeTemperatureIcon(roomName, data) {
@@ -464,15 +538,6 @@ function changeTemperatureText(roomName, data) {
 function changeHumidityText(roomName, data) {
     const s = `${data} %`;
     AREAS[roomName].humidityNum.text(s);
-    return s;
-}
-
-function changeCo2Text(roomName, data) {
-    const s = `${data} ppm`;
-    const rn = AREAS[roomName].co2Num;
-    if (rn != null) {
-        rn.text(s);
-    }
     return s;
 }
 
@@ -530,6 +595,22 @@ function updateEntryInTable(roomName, type, text, timestamp) {
         }
         else {
             entry.className = "available";
+        }
+    }
+    let dataText = text;
+    if (typeof(text) === 'number') {
+        dataText = Number(text).toLocaleString();
+    }
+    if (type === "co2data") {
+        entry.innerText = dataText + " ppm";
+        if (text >= 1000) {
+            entry.style = "color: red";
+        }
+        else if (text >= 700) {
+            entry.style = "color: orange";
+        }
+        else {
+            entry.style = "color: black";
         }
     }
 }
@@ -612,9 +693,9 @@ function addRoomToTable(room) {
     tr.append(maketd(getOccupiedText(), "occupied", "available")); /* room occupied? */
     tr.append(maketd("0 °C", "temperature")); /* last known temperature */
     tr.append(maketd("0%", "humidity")); /* last known humidity */
-    tr.append(maketd("0ppm", "co2")); /* last known CO2 reading */
-    tr.append(maketd("n/a", "calldate")); /* last known call date */
-    tr.append(maketd("n/a", "urgentcalldate")); /* last known urgent call date */
+    tr.append(maketd("-", "co2data")); /* last known CO2 update - not all rooms have this */
+    tr.append(maketd("-", "calldate")); /* last known call date */
+    tr.append(maketd("-", "urgentcalldate")); /* last known urgent call date */
 
     document.getElementById("roomTableBody").append(tr);
 }
@@ -624,7 +705,6 @@ async function FetchUpdates() {
     const lrd = new Date();
     document.getElementById("lastRequestedDate").innerText = lrd;
     q =`/fetch?datefrom=${LastFetchDate.toISOString()}`;
-    console.log("PRINTING")
     console.log(q)
     const fetched = await fetch(q, {"method": "GET"});
     const json = await fetched.json();
@@ -636,7 +716,9 @@ async function FetchUpdates() {
             latestTimestamp = reading["Timestamp"];
         });
     });
-    document.getElementById("lastDataAtDate").innerText = new Date(latestTimestamp);
+    if(latestTimestamp !== "" && latestTimestamp !== undefined) {
+        document.getElementById("lastDataAtDate").innerText = new Date(latestTimestamp);
+    }
     LastFetchDate = lrd;
 }
 
@@ -648,70 +730,62 @@ async function main() {
 
     [AREAIDX_2_ROOMNAME, ROOMNAME_2_AREAIDX] = assignRoomIdMap();
     
-    
     const rooms = [
-        new Room(ROOM_NAMES[0] || "Scorpio",
-            false,
+        new Room("Seminar room",
             new Pos(250, -125, 1), /* room absolute position */
             new Pos(40, 0, 1), /* Label offset, relative to room offset */
         ),
-        new Room(ROOM_NAMES[1] || "Leo",
-            true,
+        new Room("NextScale",
             new Pos(180, -125, 1), /* room absolute position */
             new Pos(10,0, 1), /* Label offset, relative to room offset */
         ), 
-        new Room(ROOM_NAMES[2] || "Aries",
-            true,
+        new Room("SystemX",
             new Pos(112, -125, 1), /* room absolute position */
             new Pos(10, 0, 1), /* Label offset, relative to room offset */
         ),
-        new Room(ROOM_NAMES[3] || "Sagittarius",
-            false,
+        new Room("FlexSystem",
             new Pos(18, -125, 1), /* room absolute position */
             new Pos(18, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room(ROOM_NAMES[4] || "Capricorn",
-        false,
+        new Room("ThinkVision",
             new Pos(-76, -125, 1), /* room absolute position */
             new Pos(18, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room(ROOM_NAMES[5] || "Taurus",
-        false,
+        new Room("ThinkStation",
             new Pos(-153, -125, 1), /* room absolute position */
             new Pos(5, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room(ROOM_NAMES[6] || "Gemini",
-        false,
+        new Room("ThinkCentre",
             new Pos(-153, -31, 1), /* room absolute position */
             new Pos(5, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room(ROOM_NAMES[7] || "Cancer",
-        false,
+        new Room("ThinkPad",
             new Pos(-153, 44, 1), /* room absolute position */
             new Pos(5, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room(ROOM_NAMES[8] || "Aquarius",
-        false,
+        new Room("IdeaPad",
             new Pos(-50, -31, 1), /* room absolute position */
             new Pos(10, 0, 1), /* Label offset, relative to room offset */
         ),
-        new Room(ROOM_NAMES[9] || "Pisces",
-        false,
+        new Room("IdeaCentre",
             new Pos(18, -31, 1), /* room absolute position */
             new Pos(7, 0, 1), /* Label offset, relative to room offset */
             new Pos(5, 0, 0.7), /* People offset */
         ),
-        new Room(ROOM_NAMES[10] || "Libra",
-        false,
+        new Room("Telecube",
             new Pos(-50, 86, 1), /* room absolute position */
             new Pos(10, 0, 1), /* Label offset, relative to room offset */
         ),
     ];
+
+    /** add CO2 data */
+    rooms[1].CO2 = new Pos(10,300,0.7);
+    rooms[2].CO2 = new Pos(10,300,0.7);
 
     rooms.forEach((x) => {
         AREAS[x.Name] = AddRoom(x)
@@ -725,10 +799,10 @@ async function main() {
     LastFetchDate = new Date(LastFetchDate.setDate(LastFetchDate.getDate() - 1));
     fetchTimer = setInterval(FetchUpdates, FETCH_LATEST_FROM_SERVER_SECS * 1000);
 
+
     if (IS_DEMO) {
         DEMO_ENGAGE();
     }
 }
-
 
 main();
