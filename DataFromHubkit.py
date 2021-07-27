@@ -15,24 +15,7 @@ HUBKIT_IP = "localhost"
 
 Area2IdMap: Dict[str, str] = {}
 Id2AreaMap: Dict[str, str] = {}
-
-
-dataKinds = {
-    "24ce6d4d-ff08-46b5-ab6c-d8fdd50eea94": "Temperature",
-    "4723d025-a1f2-431c-8e75-a9ba350ceae5": "Humidity",
-    "927fa2a1-1fcc-4ea3-9b39-8c9e7263de0d": "Door",
-    "fafd5c5c-6415-4def-83d3-986913546c67": "Motion Detected",
-    "7e87a819-135e-40d3-9d5f-c0330f38ec4e": "CO2",
-}
-
-DeviceId2LastReadingTimestamp = {}
-
 allPossibleIds = set()
-SeenIdsForRun = set()
-MaxPageScan = 10
-ScanStartDate = datetime.min
-MaxScanTime = timedelta(seconds=30)
-MostRecentReadingAt = datetime.min
 
 
 class DataReading():
@@ -60,9 +43,9 @@ def getArea2IdMap():
             for vdev in layer["VirtualDevices"]:
                 allPossibleIds.add(vdev["Id"])
 
-def getAllDeviceData() -> Union[Dict[str, DataReading], int]:
+def getAllDeviceData(timestamp: datetime = datetime.min) -> Union[Dict[str, DataReading], int]:
     data = {}
-    strft = datetime.min.strftime("%Y-%m-%dT%H:%M:%SZ")
+    strft = timestamp.strftime("%Y-%m-%dT%H:%M:%SZ")
     for deviceId in allPossibleIds:
         res = requests.get(URL.format(HUBKIT_IP, strft, deviceId), verify=False)
         if res.status_code != 200:
@@ -129,7 +112,7 @@ def FullFetch(hubkit_ip = HUBKIT_IP, timestamp = datetime.utcnow(), areaName = N
     # populate the areas list on first run
     if (len(Area2IdMap) == 0):
         getArea2IdMap()
-    dData = getAllDeviceData()
+    dData = getAllDeviceData(timestamp)
     retVals = massageReturnVals(dData)
     print(retVals)
     return retVals
