@@ -444,7 +444,7 @@ function UpdateHumidity(roomName, reading) {
 // }
 
 function UpdateCO2(roomName, reading) {
-    updateEntryInTable(roomName, "co2", reading.Data, reading["Timestamp"]);
+    updateEntryInTable(roomName, "co2", reading.Data + " ppm", reading["Timestamp"]);
     console.log(`${roomName}:: CO2 update received`);
     let d = Math.ceil(reading.Data);
     if (d >= 1800) {
